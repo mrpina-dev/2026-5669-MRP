@@ -14,6 +14,18 @@ public final class Constants {
         public static final AngularVelocity kMaxAngularRate = RotationsPerSecond.of(0.75);
     }
 
+    public static final class Pneumatics {
+        public static final int kPcmId = 0; // Default PCM ID
+        
+        // Solenoid 1 (e.g. Intake Piston)
+        public static final int kSol1Forward = 0;
+        public static final int kSol1Reverse = 1;
+
+        // Solenoid 2 (e.g. Climber Piston)
+        public static final int kSol2Forward = 2;
+        public static final int kSol2Reverse = 3;
+    }
+
     // --- SHOOTER (KEPT EXACTLY AS UPLOADED) ---
     public static final class Shooter {
         public static final int kLeaderId = 16; //fixed
