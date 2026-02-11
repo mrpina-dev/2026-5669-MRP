@@ -25,16 +25,18 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterIntakeSubsystem;
-import frc.robot.subsystems.GoobaSubsystem; // [NEW]
+import frc.robot.subsystems.GoobaSubsystem;
 import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
+import frc.robot.subsystems.PneumaticSubsystem; // [NEW]
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
 import frc.robot.commands.FuelHandlingCommand;
-import frc.robot.commands.GoobaToggleCommand; // [NEW]
+import frc.robot.commands.GoobaToggleCommand;
 import frc.robot.commands.GooberAlign;
 import frc.robot.commands.Mariosearcommand;
+import frc.robot.commands.TogglePneumaticCommand; // [NEW]
 
 public class RobotContainer {
     
@@ -60,10 +62,23 @@ public class RobotContainer {
     public final ShooterSubsystem shooter = new ShooterSubsystem();
     public final IndexSubsystem index = new IndexSubsystem();
     public final ShooterIntakeSubsystem shooterIntake = new ShooterIntakeSubsystem();
-    public final GoobaSubsystem gooba = new GoobaSubsystem(); // [NEW] Initializing Gooba
+    public final GoobaSubsystem gooba = new GoobaSubsystem();
     public final Goober goober = new Goober();
     public final LimelightSubsystem rizz = new LimelightSubsystem();
     public final MariosEar brick = new MariosEar(rizz);
+
+    // [NEW] Pneumatics Subsystems
+    public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId, 
+        Constants.Pneumatics.kSol1Forward, 
+        Constants.Pneumatics.kSol1Reverse
+    );
+
+    public final PneumaticSubsystem piston2 = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId, 
+        Constants.Pneumatics.kSol2Forward, 
+        Constants.Pneumatics.kSol2Reverse
+    );
 
     public RobotContainer() {
         configureBindings();
@@ -94,7 +109,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        // --- SHOOTER CONTROLS (UNCHANGED) ---
+        // --- SHOOTER CONTROLS ---
         joystick.rightTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, true)
         );
@@ -104,19 +119,21 @@ public class RobotContainer {
         );
 
         joystick.a().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
-        //joystick.b().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kslowTargetRPM));
-        //joystick.b().whileTrue(new GooberAlign(rizz, goober));
         joystick.b().whileTrue(new Mariosearcommand(brick, goober));
         
-        // --- GOOBA CONTROLS (NEW) ---
-        // Button X -> Deploy Gooba (Position 5.0)
+        // --- GOOBA CONTROLS ---
         joystick.x().onTrue(new GoobaToggleCommand(gooba, true));
-        
-        // Button Y -> Stow Gooba (Position 0.0)
         joystick.y().onTrue(new GoobaToggleCommand(gooba, false));
 
+        // --- PNEUMATICS CONTROLS [NEW] ---
+        // Toggle Piston 1 with Right Bumper
+        joystick.rightBumper().onTrue(new TogglePneumaticCommand(piston1));
+        
+        // Toggle Piston 2 with Start Button
+        joystick.start().onTrue(new TogglePneumaticCommand(piston2));
 
-        // --- DRIVETRAIN EXTRAS (UNCHANGED) ---
+
+        // --- DRIVETRAIN EXTRAS ---
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
