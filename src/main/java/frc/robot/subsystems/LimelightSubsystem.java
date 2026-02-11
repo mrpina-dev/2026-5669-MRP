@@ -16,6 +16,7 @@ public class LimelightSubsystem extends SubsystemBase {
     private final NetworkTableEntry tv;   // Target valid (0 or 1)
     private final NetworkTableEntry botpose; // Array of 6 numbers: [x, y, z, roll, pitch, yaw]
     private final NetworkTableEntry botposeTargetSpace;
+    private final NetworkTableEntry tid;
 
     public LimelightSubsystem() {
         // Adjust the table name if your limelight publishes under a different key.
@@ -26,6 +27,7 @@ public class LimelightSubsystem extends SubsystemBase {
         tv = table.getEntry("tv");
         botpose = table.getEntry("botpose");
         botposeTargetSpace = table.getEntry("botpose_targetspace");
+        tid = table.getEntry("tid");
     }
 
     /** Returns the horizontal offset (tx) from the crosshair to the target in degrees. */
@@ -67,6 +69,15 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public double[] getBotPoseTargetSpace() {
         return botposeTargetSpace.getDoubleArray(new double[6]);
+    }
+
+    public int getID() {
+        return (int) tid.getInteger(-1);
+    }
+   
+    public boolean seeID(int id){
+
+        return isTargetAvailable() && getID() == id;
     }
 
     @Override

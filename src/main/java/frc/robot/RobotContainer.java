@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -107,6 +108,12 @@ public class RobotContainer {
         //joystick.b().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kslowTargetRPM));
         //joystick.b().whileTrue(new GooberAlign(rizz, goober));
         joystick.b().whileTrue(new Mariosearcommand(brick, goober));
+        // Assuming you have an XboxController named 'driverController' 
+// and a LimelightSubsystem named 'limelight'
+        joystick.rightBumper().onTrue(
+            new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id);
+    })    
+);
         
         // --- GOOBA CONTROLS (NEW) ---
         // Button X -> Deploy Gooba (Position 5.0)

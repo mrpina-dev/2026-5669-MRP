@@ -17,6 +17,7 @@ public class MariosEar extends SubsystemBase {
 
     public boolean limelightHasTarget() {
         return limelight.isTargetAvailable();
+
     }
 
     public double getLimelightTX() {
