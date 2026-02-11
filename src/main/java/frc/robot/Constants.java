@@ -53,10 +53,10 @@ public final class Constants {
     public static final class Turret {
         public static final int kMotorId = 61; //fixed
         public static final double kSpeedMultiplier = 0.25;
-        public static final double kP = 0.2;
-        public static final double kI = 0.2;
-        public static final double kD = 0.05;
-        public static final double kToleranceDegrees = 0.5;
+        public static final double kP = 0.05;
+        public static final double kI = 0.00;
+        public static final double kD = 0.007;
+        public static final double kToleranceDegrees = 0.1;
         public static final double kMaxOutput = 0.3;
     }
 
@@ -86,6 +86,6 @@ public final class Constants {
         
         // Positions (Rotations)
         public static final double kPositionStowed = 0.0;
-        public static final double kPositionDeployed = 2.5; // [FIXME] Tune this value!
+        public static final double kPositionDeployed = 3.0; // [FIXME] Tune this value!
     }
 }

@@ -27,12 +27,14 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.GoobaSubsystem; // [NEW]
 import frc.robot.subsystems.Goober;
+import frc.robot.subsystems.MariosEar;
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
 import frc.robot.commands.FuelHandlingCommand;
 import frc.robot.commands.GoobaToggleCommand; // [NEW]
 import frc.robot.commands.GooberAlign;
+import frc.robot.commands.Mariosearcommand;
 
 public class RobotContainer {
     
@@ -61,6 +63,7 @@ public class RobotContainer {
     public final GoobaSubsystem gooba = new GoobaSubsystem(); // [NEW] Initializing Gooba
     public final Goober goober = new Goober();
     public final LimelightSubsystem rizz = new LimelightSubsystem();
+    public final MariosEar brick = new MariosEar(rizz);
 
     public RobotContainer() {
         configureBindings();
@@ -102,7 +105,8 @@ public class RobotContainer {
 
         joystick.a().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         //joystick.b().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kslowTargetRPM));
-        joystick.b().whileTrue(new GooberAlign(rizz, goober));
+        //joystick.b().whileTrue(new GooberAlign(rizz, goober));
+        joystick.b().whileTrue(new Mariosearcommand(brick, goober));
         
         // --- GOOBA CONTROLS (NEW) ---
         // Button X -> Deploy Gooba (Position 5.0)
