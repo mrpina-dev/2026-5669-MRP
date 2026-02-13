@@ -15,15 +15,15 @@ public final class Constants {
     }
 
     public static final class Pneumatics {
-        public static final int kPcmId = 0; // Default PCM ID
+        public static final int kPcmId = 25; //fixed
         
         // Solenoid 1 (e.g. Intake Piston)
-        public static final int kSol1Forward = 0;
+        public static final int kSol1Forward = 0; //fixed
         public static final int kSol1Reverse = 1;
 
         // Solenoid 2 (e.g. Climber Piston)
-        public static final int kSol2Forward = 2;
-        public static final int kSol2Reverse = 3;
+        public static final int kSol2Forward = 3; //fixed
+        public static final int kSol2Reverse = 4;
     }
 
     // --- SHOOTER (KEPT EXACTLY AS UPLOADED) ---
@@ -83,7 +83,7 @@ public final class Constants {
 
     // --- NEW GOOBA CONSTANTS (Kraken X44) ---
     public static final class Gooba {
-        public static final int kMotorId = 51; // [FIXME] Verify this ID  //Fixed
+        public static final int kMotorId = 51; //Fixed
         
         // Motion Magic (Servo-like Position Control)
         public static final double kP = 2.4; 
@@ -98,6 +98,6 @@ public final class Constants {
         
         // Positions (Rotations)
         public static final double kPositionStowed = 0.0;
-        public static final double kPositionDeployed = 3.0; // [FIXME] Tune this value!
+        public static final double kPositionDeployed = 3.5; // [FIXME] Tune this value!
     }
 }

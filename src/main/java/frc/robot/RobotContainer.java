@@ -121,8 +121,7 @@ public class RobotContainer {
 
         joystick.a().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         joystick.b().whileTrue(new Mariosearcommand(brick, goober));
-        // Assuming you have an XboxController named 'driverController' 
-// and a LimelightSubsystem named 'limelight'
+        
         joystick.rightBumper().onTrue(
             new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id);
     })    
