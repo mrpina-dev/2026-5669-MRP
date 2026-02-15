@@ -29,7 +29,7 @@ import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.GoobaSubsystem;
 import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
-import frc.robot.subsystems.PneumaticSubsystem; // [NEW]
+import frc.robot.subsystems.PneumaticSubsystem; 
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -37,7 +37,9 @@ import frc.robot.commands.FuelHandlingCommand;
 import frc.robot.commands.GoobaToggleCommand;
 import frc.robot.commands.GooberAlign;
 import frc.robot.commands.Mariosearcommand;
-import frc.robot.commands.TogglePneumaticCommand; // [NEW]
+import frc.robot.commands.TogglePneumaticCommand; 
+import frc.robot.commands.ManualGoobaCommand;   // [NEW] Manual Gooba Jogging
+import frc.robot.commands.ManualTurretCommand;  // [NEW] Manual Turret Jogging
 
 public class RobotContainer {
     
@@ -68,7 +70,7 @@ public class RobotContainer {
     public final LimelightSubsystem rizz = new LimelightSubsystem();
     public final MariosEar brick = new MariosEar(rizz);
 
-    // [NEW] Pneumatics Subsystems
+    // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol1Forward, 
@@ -87,23 +89,23 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(
-    drivetrain.applyRequest(() -> {
-        
-        double xInput = -joystick.getLeftY();
-        double yInput = -joystick.getLeftX();
-        double rInput = -joystick.getRightX();
+            drivetrain.applyRequest(() -> {
+                
+                double xInput = -joystick.getLeftY();
+                double yInput = -joystick.getLeftX();
+                double rInput = -joystick.getRightX();
 
-       
-        double scaledX = Math.signum(xInput) * Math.pow(Math.abs(xInput), 3);
-        double scaledY = Math.signum(yInput) * Math.pow(Math.abs(yInput), 3);
-        double scaledRot = Math.signum(rInput) * Math.pow(Math.abs(rInput), 3);
+               
+                double scaledX = Math.signum(xInput) * Math.pow(Math.abs(xInput), 3);
+                double scaledY = Math.signum(yInput) * Math.pow(Math.abs(yInput), 3);
+                double scaledRot = Math.signum(rInput) * Math.pow(Math.abs(rInput), 3);
 
-        return drive
-            .withVelocityX(scaledX * MaxSpeed)
-            .withVelocityY(scaledY * MaxSpeed)
-            .withRotationalRate(scaledRot * MaxAngularRate);
-    })
-);
+                return drive
+                    .withVelocityX(scaledX * MaxSpeed)
+                    .withVelocityY(scaledY * MaxSpeed)
+                    .withRotationalRate(scaledRot * MaxAngularRate);
+            })
+        );
 
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
@@ -120,20 +122,37 @@ public class RobotContainer {
         );
 
         joystick.a().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
+        
+        // STANDARD TURRET AIMING ON B (No Gooba Auto-aim yet)
         joystick.b().whileTrue(new Mariosearcommand(brick, goober));
         
-        joystick.rightBumper().onTrue(
-            new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id);
-    })    
-);
-        
-        // --- GOOBA CONTROLS ---
+        // --- GOOBA MANUAL CONTROLS (Toggles) ---
         joystick.x().onTrue(new GoobaToggleCommand(gooba, true));
         joystick.y().onTrue(new GoobaToggleCommand(gooba, false));
 
-        // --- PNEUMATICS CONTROLS [NEW] ---
-        // Toggle Piston 1 with Right Bumper
-        joystick.rightBumper().onTrue(new TogglePneumaticCommand(piston1));
+        // ==========================================
+        // --- TEMPORARY TUNING PAD (D-PAD) ---
+        // ==========================================
+        
+        // UP/DOWN: Gooba (Arc) Jogging
+        joystick.povUp().whileTrue(new ManualGoobaCommand(gooba, true));
+        joystick.povDown().whileTrue(new ManualGoobaCommand(gooba, false));
+
+        // LEFT/RIGHT: Turret Jogging 
+        // Note: Speed is set to 0.4. If it rotates too fast or slow, adjust these numbers.
+        // Swap negative/positive if it spins the wrong way.
+        joystick.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
+        joystick.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
+
+
+        // --- PNEUMATICS CONTROLS ---
+        // Toggle Piston 1 & check Limelight ID with Right Bumper
+        joystick.rightBumper().onTrue(
+            Commands.parallel(
+                new TogglePneumaticCommand(piston1),
+                new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
+            )
+        );
         
         // Toggle Piston 2 with Start Button
         joystick.start().onTrue(new TogglePneumaticCommand(piston2));
