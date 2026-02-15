@@ -99,5 +99,9 @@ public final class Constants {
         // Positions (Rotations)
         public static final double kPositionStowed = 0.0;
         public static final double kPositionDeployed = 3.5; // [FIXME] Tune this value!
+
+        public final static double kmountAngleDegrees = 0.0;
+        public final static double klensheightmeters = 0.0;
+        public final static double kaprilTagHeightMeters = 0.0;
     }
 }

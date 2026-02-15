@@ -6,9 +6,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class GoobaSubsystem extends SubsystemBase {
     private final TalonFX m_motor = new TalonFX(Constants.Gooba.kMotorId);
+    private final InterpolatingDoubleTreeMap shotMap = new InterpolatingDoubleTreeMap();
     
     // Motion Magic Request (Smooth position control)
     private final MotionMagicVoltage m_positionControl = new MotionMagicVoltage(0);
@@ -36,6 +38,8 @@ public class GoobaSubsystem extends SubsystemBase {
         
         // Reset encoder to 0 on startup
         m_motor.setPosition(0);
+
+        shotMap.put(0.0, 0.0);
     }
 
     public void setPosition(double rotations) {
@@ -44,5 +48,9 @@ public class GoobaSubsystem extends SubsystemBase {
 
     public double getPosition() {
         return m_motor.getPosition().getValueAsDouble();
+    }
+
+    public double getRotationValueFromDistance(double distance) {
+        return shotMap.get(distance);
     }
 }

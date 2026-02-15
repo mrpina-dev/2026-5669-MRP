@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
     private final NetworkTable table;
@@ -78,6 +79,15 @@ public class LimelightSubsystem extends SubsystemBase {
     public boolean seeID(int id){
 
         return isTargetAvailable() && getID() == id;
+    }
+
+    public double distanceToTarget() {
+        if (!isTargetAvailable()) return 0.0;
+
+        double angleToGoalDeg = Constants.Gooba.kmountAngleDegrees + getTX();
+        double angleToGoalRad = Math.toRadians(angleToGoalDeg);
+
+        return (Constants.Gooba.kaprilTagHeightMeters - Constants.Gooba.klensheightmeters) / Math.tan(angleToGoalRad);
     }
 
     @Override
