@@ -29,7 +29,8 @@ import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.GoobaSubsystem;
 import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
-import frc.robot.subsystems.PneumaticSubsystem; 
+import frc.robot.subsystems.PneumaticSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem; // NEW
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -38,8 +39,9 @@ import frc.robot.commands.GoobaToggleCommand;
 import frc.robot.commands.GooberAlign;
 import frc.robot.commands.Mariosearcommand;
 import frc.robot.commands.TogglePneumaticCommand; 
-import frc.robot.commands.ManualGoobaCommand;   // [NEW] Manual Gooba Jogging
-import frc.robot.commands.ManualTurretCommand;  // [NEW] Manual Turret Jogging
+import frc.robot.commands.ManualGoobaCommand;
+import frc.robot.commands.ManualTurretCommand;
+import frc.robot.commands.RunGroundIntakeCommand; // NEW
 
 public class RobotContainer {
     
@@ -69,6 +71,9 @@ public class RobotContainer {
     public final Goober goober = new Goober();
     public final LimelightSubsystem rizz = new LimelightSubsystem();
     public final MariosEar brick = new MariosEar(rizz);
+
+    // NEW Subsystem
+    public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
@@ -145,14 +150,15 @@ public class RobotContainer {
         joystick.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
 
 
-        // --- PNEUMATICS CONTROLS ---
-        // Toggle Piston 1 & check Limelight ID with Right Bumper
+        // --- NEW GROUND INTAKE CONTROLS ---
+        // OVERRIDE: Toggle Ground Intake Piston (Replaces old piston1 toggle)
         joystick.rightBumper().onTrue(
-            Commands.parallel(
-                new TogglePneumaticCommand(piston1),
-                new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
-            )
+            new InstantCommand(groundIntake::toggleIntake, groundIntake)
         );
+
+        // NEW MAP: Run Ground Intake Motor (Mapped to Left Stick Button / L3)
+        joystick.leftStick().whileTrue(new RunGroundIntakeCommand(groundIntake));
+
         
         // Toggle Piston 2 with Start Button
         joystick.start().onTrue(new TogglePneumaticCommand(piston2));
