@@ -9,6 +9,7 @@ import frc.robot.Constants;
 
 
 //Authentically Coded By Lukas Deusch - Senior 
+// oh really
 
 public class ShooterIntakeSubsystem extends SubsystemBase {
     private final TalonFX motor = new TalonFX(Constants.ShooterIntake.kMotorId);

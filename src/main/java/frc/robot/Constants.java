@@ -102,6 +102,6 @@ public final class Constants {
 
         public final static double kmountAngleDegrees = 0.0;
         public final static double klensheightmeters = 0.0;
-        public final static double kaprilTagHeightMeters = 0.0;
+        public final static double kaprilTagHeightMeters = 1.12395;
     }
 }

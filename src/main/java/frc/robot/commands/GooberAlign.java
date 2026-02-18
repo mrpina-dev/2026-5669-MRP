@@ -32,6 +32,8 @@ public class GooberAlign extends Command {
             return;
         }
 
+        
+
         double tx = limelight.getTX();
         double pidOutput = turnPID.calculate(tx, 0.0);
 

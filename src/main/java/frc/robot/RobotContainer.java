@@ -147,15 +147,13 @@ public class RobotContainer {
 
         // --- PNEUMATICS CONTROLS ---
         // Toggle Piston 1 & check Limelight ID with Right Bumper
-        joystick.rightBumper().onTrue(
-            Commands.parallel(
-                new TogglePneumaticCommand(piston1),
-                new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
-            )
-        );
+        joystick.rightBumper().onTrue( new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
+            );
+        
         
         // Toggle Piston 2 with Start Button
         joystick.start().onTrue(new TogglePneumaticCommand(piston2));
+        joystick.start().onTrue(new TogglePneumaticCommand(piston1));
 
 
         // --- DRIVETRAIN EXTRAS ---
