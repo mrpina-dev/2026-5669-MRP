@@ -36,7 +36,8 @@ import frc.robot.subsystems.GoobaSubsystem;
 import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
 import frc.robot.subsystems.PneumaticSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem; // NEW
+import frc.robot.subsystems.GroundIntakeSubsystem; 
+import frc.robot.subsystems.ClimbSubsystem; // INJECTED CLIMB
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -47,7 +48,8 @@ import frc.robot.commands.Mariosearcommand;
 import frc.robot.commands.TogglePneumaticCommand; 
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
-import frc.robot.commands.RunGroundIntakeCommand; // NEW
+import frc.robot.commands.RunGroundIntakeCommand; 
+import frc.robot.commands.RunClimbMotorCommand; // INJECTED CLIMB
 
 public class RobotContainer {
     
@@ -78,8 +80,9 @@ public class RobotContainer {
     public final LimelightSubsystem rizz = new LimelightSubsystem();
     public final MariosEar brick = new MariosEar(rizz);
 
-    // NEW Subsystem
+    // NEW Subsystems
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
+    public final ClimbSubsystem climb = new ClimbSubsystem(); // INJECTED CLIMB
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
@@ -152,6 +155,15 @@ public class RobotContainer {
         // --- STANDARD TURRET AIMING (Moved to Back Button) ---
         joystick.back().whileTrue(new Mariosearcommand(brick, goober));
 
+        // --- CLIMB CONTROLS ---
+        // Toggle both climb pistons simultaneously with the START button (Swapped from X)
+        joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
+
+        // Kraken X60 Motor Control: Y goes Up (Positive speed), A goes Down (Negative speed)
+        joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
+        joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
+
+
         // ==========================================
         // --- TEMPORARY TUNING PAD (D-PAD) ---
         // ==========================================
@@ -170,14 +182,15 @@ public class RobotContainer {
         joystick.rightBumper().onTrue( new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
             );
         
-        // Toggle Piston 2 with Start Button
-        joystick.start().onTrue(new TogglePneumaticCommand(piston2));
-        joystick.start().onTrue(new TogglePneumaticCommand(piston1));
+        // Toggle Piston 2 & 1 with X Button (Swapped from Start)
+        joystick.x().onTrue(new TogglePneumaticCommand(piston2));
+        joystick.x().onTrue(new TogglePneumaticCommand(piston1));
 
 
         // --- DRIVETRAIN EXTRAS ---
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
+        // Note: SysId routines share the Back and Start buttons as modifiers
         joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));

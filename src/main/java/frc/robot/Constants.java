@@ -115,7 +115,22 @@ public final class Constants {
         public static final int kForwardChannel = 5; 
         public static final int kReverseChannel = 6; 
 
+        //
+
         // Safety for X44
         public static final double kSupplyCurrentLimit = 40.0;
+    }
+
+    // --- CLIMB SYSTEM (Kraken X60 & Dual Pistons T-Fitted) ---
+    public static final class Climb {
+        public static final int kMotorId = 21; 
+        
+        public static final double kClimbSpeed = 0.02; 
+        public static final boolean kMotorInverted = false; 
+        public static final double kSupplyCurrentLimit = 60.0; 
+
+        // Both pistons run off these last two remaining channels
+        public static final int kPistonsForward = 2; 
+        public static final int kPistonsReverse = 7;
     }
 }
