@@ -21,6 +21,10 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Subsystems
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -90,8 +94,15 @@ public class RobotContainer {
         Constants.Pneumatics.kSol2Reverse
     );
 
+    private final SendableChooser<Command> autoChooser;
+
     public RobotContainer() {
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        SmartDashboard.putData("Auto Mode", autoChooser);
+
         configureBindings();
+
+        FollowPathCommand.warmupCommand().schedule();
     }
 
     private void configureBindings() {
