@@ -67,7 +67,7 @@ public final class Constants {
         public static final double kSpeedMultiplier = 0.25;
         public static final double kP = 0.05;
         public static final double kI = 0.00;
-        public static final double kD = 0.005;
+        public static final double kD = 0.004;
         public static final double kToleranceDegrees = 0.1;
         public static final double kMaxOutput = 0.3;
     }

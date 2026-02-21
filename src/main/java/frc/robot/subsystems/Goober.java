@@ -13,12 +13,12 @@ public class Goober extends SubsystemBase {
 
     public Goober() {
 
-    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = -20.0; 
+    /*configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.0;  //-20.0
     configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 20.0;
+    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0.0; //20.0
     configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-
+*/
     
     motor.getConfigurator().apply(configs);
     }
