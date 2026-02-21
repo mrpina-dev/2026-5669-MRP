@@ -20,6 +20,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 // Subsystems
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -88,8 +94,15 @@ public class RobotContainer {
         Constants.Pneumatics.kSol2Reverse
     );
 
+    private final SendableChooser<Command> autoChooser;
+
     public RobotContainer() {
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        SmartDashboard.putData("Auto Mode", autoChooser);
+
         configureBindings();
+
+        FollowPathCommand.warmupCommand().schedule();
     }
 
     private void configureBindings() {
@@ -125,15 +138,19 @@ public class RobotContainer {
         joystick.leftTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, false)
         );
+        
+        // --- GOOBA TOGGLE (Single Button 'B') ---
+        joystick.b().onTrue(new InstantCommand(() -> {
+            // Use Math.abs() to ignore the negative sign from the encoder when deployed
+            if (Math.abs(gooba.getPosition()) > 1.0) {
+                gooba.setPosition(Constants.Gooba.kPositionStowed);
+            } else {
+                gooba.setPosition(Constants.Gooba.kPositionDeployed);
+            }
+        }, gooba));
 
-        joystick.a().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
-        
-        // STANDARD TURRET AIMING ON B (No Gooba Auto-aim yet)
-        joystick.b().whileTrue(new Mariosearcommand(brick, goober));
-        
-        // --- GOOBA MANUAL CONTROLS (Toggles) ---
-        joystick.x().onTrue(new GoobaToggleCommand(gooba, true));
-        joystick.y().onTrue(new GoobaToggleCommand(gooba, false));
+        // --- STANDARD TURRET AIMING (Moved to Back Button) ---
+        joystick.back().whileTrue(new Mariosearcommand(brick, goober));
 
         // ==========================================
         // --- TEMPORARY TUNING PAD (D-PAD) ---
@@ -144,8 +161,6 @@ public class RobotContainer {
         joystick.povDown().whileTrue(new ManualGoobaCommand(gooba, false));
 
         // LEFT/RIGHT: Turret Jogging 
-        // Note: Speed is set to 0.4. If it rotates too fast or slow, adjust these numbers.
-        // Swap negative/positive if it spins the wrong way.
         joystick.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
         joystick.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
 
@@ -154,7 +169,6 @@ public class RobotContainer {
         // Toggle Piston 1 & check Limelight ID with Right Bumper
         joystick.rightBumper().onTrue( new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
             );
-        
         
         // Toggle Piston 2 with Start Button
         joystick.start().onTrue(new TogglePneumaticCommand(piston2));
