@@ -34,7 +34,7 @@ public class GooberAlign extends Command {
 
         
 
-        double tx = limelight.getTX();
+        double tx = limelight.getNewTX();
         double pidOutput = turnPID.calculate(tx, 0.0);
 
         double clampedOutput = MathUtil.clamp(

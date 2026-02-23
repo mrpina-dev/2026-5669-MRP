@@ -84,11 +84,25 @@ public class LimelightSubsystem extends SubsystemBase {
     public double distanceToTarget() {
         if (!isTargetAvailable()) return 0.0;
 
-        double angleToGoalDeg = Constants.Gooba.kmountAngleDegrees + getTX();
+        double angleToGoalDeg = Constants.Gooba.kmountAngleDegrees + getTY();
         double angleToGoalRad = Math.toRadians(angleToGoalDeg);
 
         return (Constants.Gooba.kaprilTagHeightMeters - Constants.Gooba.klensheightmeters) / Math.tan(angleToGoalRad);
     }
+
+    public double getNewTX() {
+        double rawTX = getTY();
+        double distance = distanceToTarget();
+
+        if (distance < 0.5) { return rawTX; }
+
+    //get the correction in degrees
+    double correction = Math.toDegrees(Math.atan(Constants.Limelight.kHOffsetMeters / distance));
+
+    // If camera is to the RIGHT, the shooter needs to aim further RIGHT (add)
+    // If camera is to the LEFT, the shooter needs to aim further LEFT (subtract)
+    return rawTX + correction;
+}
 
     @Override
     public void periodic() {

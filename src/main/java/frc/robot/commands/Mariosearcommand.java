@@ -30,12 +30,12 @@ public class Mariosearcommand extends Command {
             double tx = vision.getLimelightTX();
             motorOutput = turnPID.calculate(tx, 0.0);
             
-        } /*else if (vision.getLeftResult().hasTargets()) {
+        } else if (vision.getLeftResult().hasTargets()) {
             // PHASE 2: Left USB Camera found something
             // We use a simple constant speed or a lazy PID to swing the turret left
             motorOutput = -0.3; // Adjust speed and sign (+/-) based on your motor orientation
             
-        } */else if (vision.getRightResult().hasTargets()) {
+        } else if (vision.getRightResult().hasTargets()) {
             // PHASE 3: Right USB Camera found something
             motorOutput = 0.3; // Swing turret right
             

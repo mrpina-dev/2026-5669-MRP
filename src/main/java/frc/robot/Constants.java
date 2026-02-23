@@ -133,4 +133,9 @@ public final class Constants {
         public static final int kPistonsForward = 2; 
         public static final int kPistonsReverse = 7;
     }
+
+    public static final class Limelight {
+        public static final double kHOffsetMeters = 0.0381;
+
+    }
 }
