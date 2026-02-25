@@ -15,12 +15,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction; // SysId removed
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,32 +36,33 @@ import frc.robot.subsystems.GoobaSubsystem;
 import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
 import frc.robot.subsystems.PneumaticSubsystem;
-import frc.robot.subsystems.GroundIntakeSubsystem; 
+import frc.robot.subsystems.GroundIntakeSubsystem;
 // import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
 import frc.robot.commands.FuelHandlingCommand;
 import frc.robot.commands.GoobaToggleCommand;
+import frc.robot.commands.AutoGooba;
 import frc.robot.commands.GooberAlign;
 import frc.robot.commands.Mariosearcommand;
-import frc.robot.commands.TogglePneumaticCommand; 
+import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
-import frc.robot.commands.RunGroundIntakeCommand; 
+import frc.robot.commands.RunGroundIntakeCommand;
 // import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
 
 public class RobotContainer {
-    
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); 
+
+    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private double MaxAngularRate = Constants.Operator.kMaxAngularRate.in(RadiansPerSecond);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * Constants.Operator.kDeadband)
-            .withRotationalDeadband(MaxAngularRate * Constants.Operator.kRotationalDeadband) 
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
-            
+            .withRotationalDeadband(MaxAngularRate * Constants.Operator.kRotationalDeadband)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
@@ -70,7 +71,7 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(Constants.Operator.kDriverControllerPort);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    
+
     // Subsystems
     public final ShooterSubsystem shooter = new ShooterSubsystem();
     public final IndexSubsystem index = new IndexSubsystem();
@@ -86,20 +87,106 @@ public class RobotContainer {
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
-        Constants.Pneumatics.kPcmId, 
-        Constants.Pneumatics.kSol1Forward, 
+        Constants.Pneumatics.kPcmId,
+        Constants.Pneumatics.kSol1Forward,
         Constants.Pneumatics.kSol1Reverse
     );
 
     public final PneumaticSubsystem piston2 = new PneumaticSubsystem(
-        Constants.Pneumatics.kPcmId, 
-        Constants.Pneumatics.kSol2Forward, 
+        Constants.Pneumatics.kPcmId,
+        Constants.Pneumatics.kSol2Forward,
         Constants.Pneumatics.kSol2Reverse
     );
 
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+
+        // =============================================================
+        // REGISTER NAMED COMMANDS FOR PATHPLANNER
+        // These names MUST match EXACTLY what you type in the PathPlanner GUI.
+        // This MUST happen BEFORE AutoBuilder.buildAutoChooser().
+        // =============================================================
+
+        // --- SHOOTING ---
+        // Spins up the shooter wheels to full speed. Use as an event marker
+        // while driving so the shooter is ready when you arrive.
+        NamedCommands.registerCommand("spinUpShooter",
+            new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM)
+        );
+
+        // Spins up shooter at slower speed (for closer shots)
+        NamedCommands.registerCommand("spinUpShooterSlow",
+            new RunShooterCommand(shooter, Constants.Shooter.kslowTargetRPM)
+        );
+
+        // Runs the full shooting sequence: index + shooterIntake + shooter forward.
+        // Give it a timeout in the PathPlanner GUI (1.5-2.5 seconds is typical).
+        NamedCommands.registerCommand("shoot",
+            new FuelHandlingCommand(index, shooterIntake, shooter, true)
+        );
+
+        // Stops the shooter wheels
+        NamedCommands.registerCommand("stopShooter",
+            new InstantCommand(() -> shooter.stop(), shooter)
+        );
+
+        // --- INTAKE (Fuel Handling Reverse = picking up fuel) ---
+        // Runs index + shooterIntake + shooter in reverse to pull fuel in.
+        // Give it a timeout in PathPlanner GUI (2-3 seconds).
+        NamedCommands.registerCommand("intake",
+            new FuelHandlingCommand(index, shooterIntake, shooter, false)
+        );
+
+        // --- GROUND INTAKE ---
+        // Runs the ground intake roller. Give it a timeout in PathPlanner.
+        NamedCommands.registerCommand("runGroundIntake",
+            new RunGroundIntakeCommand(groundIntake)
+        );
+
+        // --- GOOBA (Hood/Arc) ---
+        // Deploys the gooba to shooting position
+        NamedCommands.registerCommand("deployGooba",
+            new GoobaToggleCommand(gooba, true)
+        );
+
+        // Stows the gooba back to resting position
+        NamedCommands.registerCommand("stowGooba",
+            new GoobaToggleCommand(gooba, false)
+        );
+
+        // Auto-aims the gooba using Limelight distance.
+        // Use as a deadline command or give it a timeout in PathPlanner.
+        NamedCommands.registerCommand("autoAimGooba",
+            new AutoGooba(gooba, rizz)
+        );
+
+        // --- TURRET ---
+        // Auto-aims the turret using MariosEar (Limelight + USB cameras).
+        // Give it a timeout in PathPlanner (1.5-2.5 seconds).
+        NamedCommands.registerCommand("aimTurret",
+            new Mariosearcommand(brick, goober)
+        );
+
+        // Aligns turret using only the Limelight (no USB cameras).
+        NamedCommands.registerCommand("alignTurret",
+            new GooberAlign(rizz, goober)
+        );
+
+        // --- PNEUMATICS ---
+        // Toggle piston 1
+        NamedCommands.registerCommand("togglePiston1",
+            new TogglePneumaticCommand(piston1)
+        );
+
+        // Toggle piston 2
+        NamedCommands.registerCommand("togglePiston2",
+            new TogglePneumaticCommand(piston2)
+        );
+
+        // =============================================================
+        // AUTO CHOOSER — must come AFTER named commands
+        // =============================================================
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -111,12 +198,11 @@ public class RobotContainer {
     private void configureBindings() {
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> {
-                
+
                 double xInput = -joystick.getLeftY();
                 double yInput = -joystick.getLeftX();
                 double rInput = -joystick.getRightX();
 
-               
                 double scaledX = Math.signum(xInput) * Math.pow(Math.abs(xInput), 3);
                 double scaledY = Math.signum(yInput) * Math.pow(Math.abs(yInput), 3);
                 double scaledRot = Math.signum(rInput) * Math.pow(Math.abs(rInput), 3);
@@ -141,7 +227,7 @@ public class RobotContainer {
         joystick.leftTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, false)
         );
-        
+
         // --- GOOBA TOGGLE (Single Button 'B') ---
         joystick.b().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
@@ -159,28 +245,27 @@ public class RobotContainer {
         // joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
         // joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
-
         // ==========================================
         // --- TEMPORARY TUNING PAD (D-PAD) ---
         // ==========================================
-        
+
         // UP/DOWN: Gooba (Arc) Jogging
         joystick.povUp().whileTrue(new ManualGoobaCommand(gooba, true));
         joystick.povDown().whileTrue(new ManualGoobaCommand(gooba, false));
 
-        // LEFT/RIGHT: Turret Jogging 
+        // LEFT/RIGHT: Turret Jogging
         joystick.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
         joystick.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
 
-
         // --- PNEUMATICS CONTROLS ---
-        joystick.rightBumper().onTrue( new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
-            );
-        
+        joystick.rightBumper().onTrue(new InstantCommand(() -> {
+            int id = rizz.getID();
+            System.out.println("ID: " + id);
+        }));
+
         // Toggle Piston 2 & 1 with X Button
         joystick.x().onTrue(new TogglePneumaticCommand(piston2));
         joystick.x().onTrue(new TogglePneumaticCommand(piston1));
-
 
         // --- DRIVETRAIN EXTRAS ---
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
