@@ -156,7 +156,7 @@ public class RobotContainer {
         joystick.back().whileTrue(new Mariosearcommand(brick, goober));
 
         // --- CLIMB CONTROLS ---
-        // Toggle both climb pistons simultaneously with the START button (Swapped from X)
+        // Toggle both climb pistons simultaneously with the START button
         joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
 
         // Kraken X60 Motor Control: Y goes Up (Positive speed), A goes Down (Negative speed)
@@ -182,7 +182,7 @@ public class RobotContainer {
         joystick.rightBumper().onTrue( new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
             );
         
-        // Toggle Piston 2 & 1 with X Button (Swapped from Start)
+        // Toggle Piston 2 & 1 with X Button
         joystick.x().onTrue(new TogglePneumaticCommand(piston2));
         joystick.x().onTrue(new TogglePneumaticCommand(piston1));
 
@@ -190,25 +190,35 @@ public class RobotContainer {
         // --- DRIVETRAIN EXTRAS ---
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        // Note: SysId routines share the Back and Start buttons as modifiers
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // NOTE: SysId bindings removed to avoid conflicts with climb (start) and turret (back) buttons.
+        // To re-enable SysId, move these to a second controller or use a different modifier scheme.
+        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
+    /**
+     * FIX: Now returns the PathPlanner auto selected from SmartDashboard/Shuffleboard.
+     * Falls back to a simple drive-forward command if no auto is selected.
+     */
     public Command getAutonomousCommand() {
+        Command selected = autoChooser.getSelected();
+        if (selected != null) {
+            return selected;
+        }
+
+        // Fallback: drive forward for a few seconds
+        System.out.println("[AUTO] WARNING: No PathPlanner auto selected, using fallback drive-forward.");
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
-            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(Constants.Auton.kDriveSpeed)
                     .withVelocityY(0)
                     .withRotationalRate(0)
-            )
-            .withTimeout(Constants.Auton.kTimeoutSeconds),
+            ).withTimeout(Constants.Auton.kTimeoutSeconds),
             drivetrain.applyRequest(() -> idle)
         );
     }
