@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction; // SysId removed
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
@@ -37,7 +37,7 @@ import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem; 
-import frc.robot.subsystems.ClimbSubsystem; // INJECTED CLIMB
+// import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -49,7 +49,7 @@ import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
 import frc.robot.commands.RunGroundIntakeCommand; 
-import frc.robot.commands.RunClimbMotorCommand; // INJECTED CLIMB
+// import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
 
 public class RobotContainer {
     
@@ -82,7 +82,7 @@ public class RobotContainer {
 
     // NEW Subsystems
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
-    public final ClimbSubsystem climb = new ClimbSubsystem(); // INJECTED CLIMB
+    // public final ClimbSubsystem climb = new ClimbSubsystem(); // CLIMB COMMENTED OUT
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
@@ -144,7 +144,6 @@ public class RobotContainer {
         
         // --- GOOBA TOGGLE (Single Button 'B') ---
         joystick.b().onTrue(new InstantCommand(() -> {
-            // Use Math.abs() to ignore the negative sign from the encoder when deployed
             if (Math.abs(gooba.getPosition()) > 1.0) {
                 gooba.setPosition(Constants.Gooba.kPositionStowed);
             } else {
@@ -152,16 +151,13 @@ public class RobotContainer {
             }
         }, gooba));
 
-        // --- STANDARD TURRET AIMING (Moved to Back Button) ---
+        // --- STANDARD TURRET AIMING (Back Button) ---
         joystick.back().whileTrue(new Mariosearcommand(brick, goober));
 
-        // --- CLIMB CONTROLS ---
-        // Toggle both climb pistons simultaneously with the START button
-        joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
-
-        // Kraken X60 Motor Control: Y goes Up (Positive speed), A goes Down (Negative speed)
-        joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
-        joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
+        // --- CLIMB CONTROLS (ALL COMMENTED OUT) ---
+        // joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
+        // joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
+        // joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
 
         // ==========================================
@@ -178,7 +174,6 @@ public class RobotContainer {
 
 
         // --- PNEUMATICS CONTROLS ---
-        // Toggle Piston 1 & check Limelight ID with Right Bumper
         joystick.rightBumper().onTrue( new InstantCommand(() -> { int id = rizz.getID(); System.out.println("ID: " + id); })
             );
         
@@ -190,8 +185,7 @@ public class RobotContainer {
         // --- DRIVETRAIN EXTRAS ---
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        // NOTE: SysId bindings removed to avoid conflicts with climb (start) and turret (back) buttons.
-        // To re-enable SysId, move these to a second controller or use a different modifier scheme.
+        // SysId bindings removed to avoid button conflicts
         // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
         // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
@@ -200,10 +194,6 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
-    /**
-     * FIX: Now returns the PathPlanner auto selected from SmartDashboard/Shuffleboard.
-     * Falls back to a simple drive-forward command if no auto is selected.
-     */
     public Command getAutonomousCommand() {
         Command selected = autoChooser.getSelected();
         if (selected != null) {
