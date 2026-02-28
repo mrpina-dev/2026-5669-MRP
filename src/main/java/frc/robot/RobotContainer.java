@@ -23,6 +23,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import org.ironmaple.simulation.SimulatedArena;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -280,21 +282,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        Command selected = autoChooser.getSelected();
-        if (selected != null) {
-            return selected;
-        }
 
-        // Fallback: drive forward for a few seconds
-        System.out.println("[AUTO] WARNING: No PathPlanner auto selected, using fallback drive-forward.");
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(Constants.Auton.kDriveSpeed)
-                    .withVelocityY(0)
-                    .withRotationalRate(0)
-            ).withTimeout(Constants.Auton.kTimeoutSeconds),
-            drivetrain.applyRequest(() -> idle)
-        );
+        return autoChooser.getSelected();
+
     }
 }
