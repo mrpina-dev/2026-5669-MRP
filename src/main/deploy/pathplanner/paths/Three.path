@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.0,
+        "y": 3.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8105298013245035,
+        "y": 2.989569536423841
+      },
+      "isLocked": false,
+      "linkedName": "End2"
+    },
+    {
+      "anchor": {
+        "x": 1.0,
+        "y": 3.0
+      },
+      "prevControl": {
+        "x": 2.222475165562914,
+        "y": 2.996829470198676
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 88.7697191937816
+  },
+  "reversed": false,
+  "folder": "Square Practice Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -179.51527134640617
+  },
+  "useDefaultConstraints": true
+}
