@@ -39,7 +39,7 @@ import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem;
-// import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
+import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -52,7 +52,7 @@ import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
 import frc.robot.commands.RunGroundIntakeCommand;
-// import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
+import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
 
 public class RobotContainer {
 
@@ -85,7 +85,7 @@ public class RobotContainer {
 
     // NEW Subsystems
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
-    // public final ClimbSubsystem climb = new ClimbSubsystem(); // CLIMB COMMENTED OUT
+    public final ClimbSubsystem climb = new ClimbSubsystem(); // CLIMB COMMENTED OUT
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
@@ -244,8 +244,8 @@ public class RobotContainer {
 
         // --- CLIMB CONTROLS (ALL COMMENTED OUT) ---
         // joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
-        // joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
-        // joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
+        joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
+        joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
         // ==========================================
         // --- TEMPORARY TUNING PAD (D-PAD) ---

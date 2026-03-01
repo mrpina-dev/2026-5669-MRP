@@ -125,7 +125,7 @@ public final class Constants {
     public static final class Climb {
         public static final int kMotorId = 21; 
         
-        public static final double kClimbSpeed = 0.02; 
+        public static final double kClimbSpeed = 0.20; 
         public static final boolean kMotorInverted = false; 
         public static final double kSupplyCurrentLimit = 60.0; 
 
