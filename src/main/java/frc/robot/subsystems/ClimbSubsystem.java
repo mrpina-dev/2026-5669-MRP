@@ -32,7 +32,13 @@ public class ClimbSubsystem extends SubsystemBase {
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         //SoftSTOP
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 1;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 135.0; 
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -25.0; //-1
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+
+        
 
 
         // Direction & Brake Mode
