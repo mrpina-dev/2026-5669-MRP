@@ -6,6 +6,8 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+
+//mario climb come back 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -28,6 +30,16 @@ public class ClimbSubsystem extends SubsystemBase {
         // Current Limits for Kraken X60 (Crucial to protect the 1:100 gearbox and ratchet)
         config.CurrentLimits.SupplyCurrentLimit = Constants.Climb.kSupplyCurrentLimit;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        //SoftSTOP
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 135.0; 
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -25.0; //-1
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+
+        
+
 
         // Direction & Brake Mode
         config.MotorOutput.Inverted = Constants.Climb.kMotorInverted ? 

@@ -23,6 +23,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import org.ironmaple.simulation.SimulatedArena;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,7 +39,7 @@ import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem;
-// import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
+import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -50,7 +52,7 @@ import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
 import frc.robot.commands.RunGroundIntakeCommand;
-// import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
+import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
 
 public class RobotContainer {
 
@@ -83,7 +85,7 @@ public class RobotContainer {
 
     // NEW Subsystems
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
-    // public final ClimbSubsystem climb = new ClimbSubsystem(); // CLIMB COMMENTED OUT
+    public final ClimbSubsystem climb = new ClimbSubsystem(); // CLIMB COMMENTED OUT
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
@@ -242,8 +244,8 @@ public class RobotContainer {
 
         // --- CLIMB CONTROLS (ALL COMMENTED OUT) ---
         // joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
-        // joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
-        // joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
+        joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
+        joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
         // ==========================================
         // --- TEMPORARY TUNING PAD (D-PAD) ---
@@ -280,21 +282,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        Command selected = autoChooser.getSelected();
-        if (selected != null) {
-            return selected;
-        }
 
-        // Fallback: drive forward for a few seconds
-        System.out.println("[AUTO] WARNING: No PathPlanner auto selected, using fallback drive-forward.");
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(Constants.Auton.kDriveSpeed)
-                    .withVelocityY(0)
-                    .withRotationalRate(0)
-            ).withTimeout(Constants.Auton.kTimeoutSeconds),
-            drivetrain.applyRequest(() -> idle)
-        );
+        return autoChooser.getSelected();
+
     }
 }
