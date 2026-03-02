@@ -60,13 +60,21 @@ public class RobotContainer {
     private double MaxAngularRate = Constants.Operator.kMaxAngularRate.in(RadiansPerSecond);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    private final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * Constants.Operator.kDeadband)
+            .withRotationalDeadband(MaxAngularRate * Constants.Operator.kRotationalDeadband)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+    private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
             .withDeadband(MaxSpeed * Constants.Operator.kDeadband)
             .withRotationalDeadband(MaxAngularRate * Constants.Operator.kRotationalDeadband)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+    /* Drive mode chooser for Shuffleboard */
+    private final SendableChooser<String> driveModeChooser = new SendableChooser<>();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -192,6 +200,13 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
+        // =============================================================
+        // DRIVE MODE CHOOSER — Field Centric vs Robot Centric
+        // =============================================================
+        driveModeChooser.setDefaultOption("Field Centric", "field");
+        driveModeChooser.addOption("Robot Centric", "robot");
+        SmartDashboard.putData("Drive Mode", driveModeChooser);
+
         configureBindings();
 
         FollowPathCommand.warmupCommand().schedule();
@@ -209,7 +224,15 @@ public class RobotContainer {
                 double scaledY = Math.signum(yInput) * Math.pow(Math.abs(yInput), 3);
                 double scaledRot = Math.signum(rInput) * Math.pow(Math.abs(rInput), 3);
 
-                return drive
+                // Check Shuffleboard chooser to pick drive mode
+                if ("robot".equals(driveModeChooser.getSelected())) {
+                    return robotCentricDrive
+                        .withVelocityX(scaledX * MaxSpeed)
+                        .withVelocityY(scaledY * MaxSpeed)
+                        .withRotationalRate(scaledRot * MaxAngularRate);
+                }
+
+                return fieldCentricDrive
                     .withVelocityX(scaledX * MaxSpeed)
                     .withVelocityY(scaledY * MaxSpeed)
                     .withRotationalRate(scaledRot * MaxAngularRate);
