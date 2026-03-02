@@ -6,11 +6,10 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-
-//mario climb come back 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; // Added for Dashboard logging
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,9 +36,6 @@ public class ClimbSubsystem extends SubsystemBase {
 
         config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -25.0; //-1
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-
-        
-
 
         // Direction & Brake Mode
         config.MotorOutput.Inverted = Constants.Climb.kMotorInverted ? 
@@ -80,5 +76,20 @@ public class ClimbSubsystem extends SubsystemBase {
     /** Toggles the climb pistons. */
     public void togglePistons() {
         m_climbPistons.toggle();
+    }
+
+    // ==========================================
+    // ADDED: Periodic method for logging
+    // ==========================================
+    @Override
+    public void periodic() {
+        // Fetch the current motor position in rotations
+        double currentPosition = m_motor.getPosition().getValueAsDouble();
+        
+        // Output to the RioLog/Console
+        System.out.println("Climb Motor Position: " + currentPosition);
+        
+        // Output to SmartDashboard (highly recommended so the console doesn't lag)
+        SmartDashboard.putNumber("Climb Motor Position", currentPosition);
     }
 }
