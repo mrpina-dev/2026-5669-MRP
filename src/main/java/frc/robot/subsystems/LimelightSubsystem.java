@@ -84,7 +84,7 @@ public class LimelightSubsystem extends SubsystemBase {
     public double distanceToTarget() {
         if (!isTargetAvailable()) return 0.0;
 
-        double angleToGoalDeg = Constants.Gooba.kmountAngleDegrees + getTY();
+        double angleToGoalDeg = Constants.Gooba.kmountAngleDegrees + getTX();
         double angleToGoalRad = Math.toRadians(angleToGoalDeg);
 
         return (Constants.Gooba.kaprilTagHeightMeters - Constants.Gooba.klensheightmeters) / Math.tan(angleToGoalRad);
@@ -94,7 +94,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double rawTX = getTY();
         double distance = distanceToTarget();
 
-        if (distance < 0.5) { return rawTX; }
+        if (distance < 0.5) { return rawTX;}
 
     //get the correction in degrees
     double correction = Math.toDegrees(Math.atan(Constants.Limelight.kHOffsetMeters / distance));

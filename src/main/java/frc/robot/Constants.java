@@ -135,7 +135,7 @@ public final class Constants {
     }
 
     public static final class Limelight {
-        public static final double kHOffsetMeters = 0.0381;
+        public static final double kHOffsetMeters = 1.5 * 0.0254;
 
     }
 }
