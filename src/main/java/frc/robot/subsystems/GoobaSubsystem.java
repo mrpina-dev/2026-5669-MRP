@@ -53,4 +53,12 @@ public class GoobaSubsystem extends SubsystemBase {
     public double getRotationValueFromDistance(double distance) {
         return shotMap.get(distance);
     }
+
+    @Override
+    public void periodic(){
+
+        double currentPos = m_motor.getPosition().getValueAsDouble();
+
+        System.out.println("GOOBA:" + currentPos);
+    }
 }
