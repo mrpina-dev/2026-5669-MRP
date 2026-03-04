@@ -78,7 +78,7 @@ public final class Constants {
     }
 
     public static final class Sim {
-        public static final double kLoopPeriod = 0.004;
+        public static final double kLoopPeriod = 0.002;
     }
 
     // --- NEW GOOBA CONSTANTS (Kraken X44) ---
