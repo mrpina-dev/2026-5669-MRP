@@ -117,8 +117,8 @@ public final class Constants {
         public static final double kIntakeSpeed = 0.75; 
 
         // Pneumatics (Using existing PCM ID 25)
-        public static final int kForwardChannel = 5; 
-        public static final int kReverseChannel = 6; 
+       //public static final int kForwardChannel = 5; 
+       // public static final int kReverseChannel = 6; 
 
         //
 
@@ -135,7 +135,7 @@ public final class Constants {
         public static final double kSupplyCurrentLimit = 60.0; 
 
         // Both pistons run off these last two remaining channels
-        public static final int kPistonsForward = 2; 
+        public static final int kPistonsForward = 5; 
         public static final int kPistonsReverse = 7;
     }
 

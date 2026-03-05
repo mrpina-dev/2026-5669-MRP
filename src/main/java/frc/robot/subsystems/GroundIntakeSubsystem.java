@@ -14,7 +14,7 @@ import frc.robot.Constants;
 
 public class GroundIntakeSubsystem extends SubsystemBase {
     private final TalonFX m_motor;
-    private final DoubleSolenoid m_pistons;
+    //private final DoubleSolenoid m_pistons;
     
     // Control request for simple percent output
     private final DutyCycleOut m_request = new DutyCycleOut(0);
@@ -39,15 +39,16 @@ public class GroundIntakeSubsystem extends SubsystemBase {
 
         // --- PNEUMATICS SETUP ---
         // Two pistons connected to one solenoid (Single DoubleSolenoid object)
+        /* 
         m_pistons = new DoubleSolenoid(
             Constants.Pneumatics.kPcmId, 
             PneumaticsModuleType.CTREPCM, 
             Constants.GroundIntake.kForwardChannel, 
             Constants.GroundIntake.kReverseChannel
         );
-
+*/
         // Default state: Retracted (Up)
-        m_pistons.set(Value.kReverse);
+      //  m_pistons.set(Value.kReverse);
     }
 
     /**
@@ -64,17 +65,19 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     }
 
     /** Deploys the intake (Pistons Out). */
+    /* 
     public void deploy() {
         m_pistons.set(Value.kForward);
     }
 
-    /** Retracts the intake (Pistons In). */
+    // Retracts the intake (Pistons In).
     public void retract() {
         m_pistons.set(Value.kReverse);
     }
 
-    /** Toggles the intake state. */
+    /** Toggles the intake state. 
     public void toggleIntake() {
         m_pistons.toggle();
     }
+    */
 }
