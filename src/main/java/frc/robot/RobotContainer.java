@@ -76,6 +76,10 @@ public class RobotContainer {
     /* Drive mode chooser for Shuffleboard */
     private final SendableChooser<String> driveModeChooser = new SendableChooser<>();
 
+    /* Speed limiter choosers for Shuffleboard */
+    private final SendableChooser<Double> globalSpeedLimiter = new SendableChooser<>();
+    private final SendableChooser<Double> buttonSpeedLimiter = new SendableChooser<>();
+
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(Constants.Operator.kDriverControllerPort);
@@ -207,6 +211,24 @@ public class RobotContainer {
         driveModeChooser.addOption("Robot Centric", "robot");
         SmartDashboard.putData("Drive Mode", driveModeChooser);
 
+        // =============================================================
+        // SPEED LIMITERS
+        // =============================================================
+
+        // Global speed limiter — always active, change via Shuffleboard only
+        globalSpeedLimiter.setDefaultOption("100%", 1.0);
+        globalSpeedLimiter.addOption("75%", 0.75);
+        globalSpeedLimiter.addOption("50%", 0.5);
+        globalSpeedLimiter.addOption("25%", 0.25);
+        SmartDashboard.putData("Global Speed Limit", globalSpeedLimiter);
+
+        // Button-held speed limiter — only active while Start button is held
+        buttonSpeedLimiter.setDefaultOption("50%", 0.5);
+        buttonSpeedLimiter.addOption("75%", 0.75);
+        buttonSpeedLimiter.addOption("25%", 0.25);
+        buttonSpeedLimiter.addOption("10%", 0.1);
+        SmartDashboard.putData("Button Speed Limit", buttonSpeedLimiter);
+
         configureBindings();
 
         FollowPathCommand.warmupCommand().schedule();
@@ -224,18 +246,27 @@ public class RobotContainer {
                 double scaledY = Math.signum(yInput) * Math.pow(Math.abs(yInput), 3);
                 double scaledRot = Math.signum(rInput) * Math.pow(Math.abs(rInput), 3);
 
+                // Apply speed limiter: use button limit while Start is held, otherwise global
+                double speedMultiplier = globalSpeedLimiter.getSelected();
+                if (joystick.getHID().getStartButton()) {
+                    speedMultiplier = buttonSpeedLimiter.getSelected();
+                }
+
+                double currentMaxSpeed = MaxSpeed * speedMultiplier;
+                double currentMaxAngularRate = MaxAngularRate * speedMultiplier;
+
                 // Check Shuffleboard chooser to pick drive mode
                 if ("robot".equals(driveModeChooser.getSelected())) {
                     return robotCentricDrive
-                        .withVelocityX(scaledX * MaxSpeed)
-                        .withVelocityY(scaledY * MaxSpeed)
-                        .withRotationalRate(scaledRot * MaxAngularRate);
+                        .withVelocityX(scaledX * currentMaxSpeed)
+                        .withVelocityY(scaledY * currentMaxSpeed)
+                        .withRotationalRate(scaledRot * currentMaxAngularRate);
                 }
 
                 return fieldCentricDrive
-                    .withVelocityX(scaledX * MaxSpeed)
-                    .withVelocityY(scaledY * MaxSpeed)
-                    .withRotationalRate(scaledRot * MaxAngularRate);
+                    .withVelocityX(scaledX * currentMaxSpeed)
+                    .withVelocityY(scaledY * currentMaxSpeed)
+                    .withRotationalRate(scaledRot * currentMaxAngularRate);
             })
         );
 
