@@ -253,7 +253,7 @@ public class RobotContainer {
 
                 // Apply speed limiter: use button limit while Start is held, otherwise global
                 double speedMultiplier = globalSpeedLimiter.getSelected();
-                if (joystick.getHID().getStartButton()) {
+                if (driverController.getHID().getStartButton()) {
                     speedMultiplier = buttonSpeedLimiter.getSelected();
                 }
 
