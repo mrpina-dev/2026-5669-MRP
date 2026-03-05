@@ -78,7 +78,8 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(Constants.Operator.kDriverControllerPort);
+    private final CommandXboxController driverController = new CommandXboxController(Constants.Operator.kDriverControllerPort);
+    private final CommandXboxController operator = new CommandXboxController(Constants.Operator.kOperatorControllerPort);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -107,6 +108,10 @@ public class RobotContainer {
         Constants.Pneumatics.kSol2Forward,
         Constants.Pneumatics.kSol2Reverse
     );
+
+    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(Constants.Pneumatics.kPcmId, 
+    Constants.Pneumatics.kSol3Forward, 
+    Constants.Pneumatics.kSol3Reverse);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -216,9 +221,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> {
 
-                double xInput = -joystick.getLeftY();
-                double yInput = -joystick.getLeftX();
-                double rInput = -joystick.getRightX();
+                double xInput = -driverController.getLeftY();
+                double yInput = -driverController.getLeftX();
+                double rInput = -driverController.getRightX();
 
                 double scaledX = Math.signum(xInput) * Math.pow(Math.abs(xInput), 3);
                 double scaledY = Math.signum(yInput) * Math.pow(Math.abs(yInput), 3);
@@ -245,16 +250,24 @@ public class RobotContainer {
         );
 
         // --- SHOOTER CONTROLS ---
-        joystick.rightTrigger().whileTrue(
+        driverController.rightTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, true)
         );
 
-        joystick.leftTrigger().whileTrue(
+        operator.rightTrigger().whileTrue(
+            new FuelHandlingCommand(index, shooterIntake, shooter, true)
+        );
+
+        driverController.leftTrigger().whileTrue(
+            new FuelHandlingCommand(index, shooterIntake, shooter, false)
+        );
+
+        operator.leftTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, false)
         );
 
         // --- GOOBA TOGGLE (Single Button 'B') ---
-        joystick.b().onTrue(new InstantCommand(() -> {
+        driverController.b().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
                 gooba.setPosition(Constants.Gooba.kPositionStowed);
             } else {
@@ -263,37 +276,38 @@ public class RobotContainer {
         }, gooba));
 
         // --- STANDARD TURRET AIMING (Back Button) ---
-        joystick.back().whileTrue(new Mariosearcommand(brick, goober));
+        driverController.back().whileTrue(new Mariosearcommand(brick, goober));
+        operator.back().whileTrue(new Mariosearcommand( brick, goober));
 
         // --- CLIMB CONTROLS (ALL COMMENTED OUT) ---
-        // joystick.start().onTrue(new InstantCommand(() -> climb.togglePistons(), climb));
-        joystick.y().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
-        joystick.a().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
+        driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
+        driverController.rightBumper().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
+        driverController.leftBumper().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
         // ==========================================
         // --- TEMPORARY TUNING PAD (D-PAD) ---
         // ==========================================
 
         // UP/DOWN: Gooba (Arc) Jogging
-        joystick.povUp().whileTrue(new ManualGoobaCommand(gooba, true));
-        joystick.povDown().whileTrue(new ManualGoobaCommand(gooba, false));
+        operator.povUp().whileTrue(new ManualGoobaCommand(gooba, true));
+        operator.povDown().whileTrue(new ManualGoobaCommand(gooba, false));
 
         // LEFT/RIGHT: Turret Jogging
-        joystick.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
-        joystick.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
+        operator.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
+        operator.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
 
         // --- PNEUMATICS CONTROLS ---
-        joystick.rightBumper().onTrue(new InstantCommand(() -> {
+        driverController.rightBumper().onTrue(new InstantCommand(() -> {
             int id = rizz.getID();
             System.out.println("ID: " + id);
         }));
 
         // Toggle Piston 2 & 1 with X Button
-        joystick.x().onTrue(new TogglePneumaticCommand(piston2));
-        joystick.x().onTrue(new TogglePneumaticCommand(piston1));
+        driverController.x().onTrue(new TogglePneumaticCommand(piston2));
+        driverController.x().onTrue(new TogglePneumaticCommand(piston1));
 
         // --- DRIVETRAIN EXTRAS ---
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         // SysId bindings removed to avoid button conflicts
         // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));

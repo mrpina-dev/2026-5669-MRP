@@ -7,6 +7,7 @@ public final class Constants {
 
     public static final class Operator {
         public static final int kDriverControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
         
         public static final double kDeadband = 0.05;
         public static final double kRotationalDeadband = 0.05;
@@ -21,9 +22,13 @@ public final class Constants {
         public static final int kSol1Forward = 0; //fixed
         public static final int kSol1Reverse = 1;
 
-        // Solenoid 2 (e.g. Climber Piston)
+        // Solenoid 2 ( intake 2 Piston)
         public static final int kSol2Forward = 3; //fixed
         public static final int kSol2Reverse = 4;
+
+        // (climb ratchet marios thing idk)
+        public static final int kSol3Forward = 2;
+        public static final int kSol3Reverse = 6;
     }
 
     // --- SHOOTER (KEPT EXACTLY AS UPLOADED) ---
