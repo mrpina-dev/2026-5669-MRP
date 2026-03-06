@@ -6,16 +6,12 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; // Added for Dashboard logging
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimbSubsystem extends SubsystemBase {
     private final TalonFX m_motor;
-    private final DoubleSolenoid m_climbPistons;
     
     // Control request for simple percent output
     private final DutyCycleOut m_request = new DutyCycleOut(0);
@@ -47,17 +43,6 @@ public class ClimbSubsystem extends SubsystemBase {
 
         m_motor.getConfigurator().apply(config);
 
-        // --- PNEUMATICS SETUP ---
-        // Both pistons are controlled by this single solenoid
-        m_climbPistons = new DoubleSolenoid(
-            Constants.Pneumatics.kPcmId, 
-            PneumaticsModuleType.CTREPCM, 
-            Constants.Climb.kPistonsForward, 
-            Constants.Climb.kPistonsReverse
-        );
-
-        // Default state: Retracted (Undeployed)
-        m_climbPistons.set(Value.kReverse);
     }
 
     /**
@@ -71,11 +56,6 @@ public class ClimbSubsystem extends SubsystemBase {
     /** Stops the climb motor. */
     public void stop() {
         m_motor.stopMotor();
-    }
-
-    /** Toggles the climb pistons. */
-    public void togglePistons() {
-        m_climbPistons.toggle();
     }
 
     // ==========================================

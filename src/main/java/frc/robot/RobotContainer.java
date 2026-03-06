@@ -39,7 +39,7 @@ import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.MariosEar;
 import frc.robot.subsystems.PneumaticSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem;
-import frc.robot.subsystems.ClimbSubsystem; // CLIMB COMMENTED OUT
+import frc.robot.subsystems.ClimbSubsystem; 
 
 // Commands
 import frc.robot.commands.RunShooterCommand;
@@ -52,7 +52,7 @@ import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
 import frc.robot.commands.RunGroundIntakeCommand;
-import frc.robot.commands.RunClimbMotorCommand; // CLIMB COMMENTED OUT
+import frc.robot.commands.RunClimbMotorCommand;
 
 public class RobotContainer {
 
@@ -95,27 +95,24 @@ public class RobotContainer {
     public final Goober goober = new Goober();
     public final LimelightSubsystem rizz = new LimelightSubsystem();
     public final MariosEar brick = new MariosEar(rizz);
-
-    // NEW Subsystems
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
-    public final ClimbSubsystem climb = new ClimbSubsystem(); // CLIMB COMMENTED OUT
+    public final ClimbSubsystem climb = new ClimbSubsystem();
 
     // Pneumatics Subsystems
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId,
         Constants.Pneumatics.kSol1Forward,
-        Constants.Pneumatics.kSol1Reverse
-    );
+        Constants.Pneumatics.kSol1Reverse);
 
     public final PneumaticSubsystem piston2 = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId,
         Constants.Pneumatics.kSol2Forward,
-        Constants.Pneumatics.kSol2Reverse
-    );
+        Constants.Pneumatics.kSol2Reverse);
 
-    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(Constants.Pneumatics.kPcmId, 
-    Constants.Pneumatics.kSol3Forward, 
-    Constants.Pneumatics.kSol3Reverse);
+    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId, 
+        Constants.Pneumatics.kSol3Forward, 
+        Constants.Pneumatics.kSol3Reverse);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -281,6 +278,9 @@ public class RobotContainer {
         );
 
         // --- SHOOTER CONTROLS ---
+        /*LISTEN UP. DRIVERCONTROLLER IS ONLY FOR DRIVING, INTAKE AND CLIMB. OPERATOR IS FOR EVERYTHING ELSE.
+        RIGHT NOW, THE DRIVERCONTROLLER STILL HAS A LOT OF STUFF FOR TESTING PURPOSES, BUT BEFORE COMP, 
+        WE ARE TAKING THAT OUT -Jhonen */
         driverController.rightTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, true)
         );

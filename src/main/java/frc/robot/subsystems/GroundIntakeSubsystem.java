@@ -6,9 +6,6 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,18 +34,6 @@ public class GroundIntakeSubsystem extends SubsystemBase {
 
         m_motor.getConfigurator().apply(config);
 
-        // --- PNEUMATICS SETUP ---
-        // Two pistons connected to one solenoid (Single DoubleSolenoid object)
-        /* 
-        m_pistons = new DoubleSolenoid(
-            Constants.Pneumatics.kPcmId, 
-            PneumaticsModuleType.CTREPCM, 
-            Constants.GroundIntake.kForwardChannel, 
-            Constants.GroundIntake.kReverseChannel
-        );
-*/
-        // Default state: Retracted (Up)
-      //  m_pistons.set(Value.kReverse);
     }
 
     /**
@@ -63,21 +48,4 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     public void stop() {
         m_motor.stopMotor();
     }
-
-    /** Deploys the intake (Pistons Out). */
-    /* 
-    public void deploy() {
-        m_pistons.set(Value.kForward);
-    }
-
-    // Retracts the intake (Pistons In).
-    public void retract() {
-        m_pistons.set(Value.kReverse);
-    }
-
-    /** Toggles the intake state. 
-    public void toggleIntake() {
-        m_pistons.toggle();
-    }
-    */
 }

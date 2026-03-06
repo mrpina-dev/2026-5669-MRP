@@ -116,12 +116,6 @@ public final class Constants {
         public static final boolean kInverted = false; 
         public static final double kIntakeSpeed = 0.75; 
 
-        // Pneumatics (Using existing PCM ID 25)
-       //public static final int kForwardChannel = 5; 
-       // public static final int kReverseChannel = 6; 
-
-        //
-
         // Safety for X44
         public static final double kSupplyCurrentLimit = 40.0;
     }
@@ -133,10 +127,6 @@ public final class Constants {
         public static final double kClimbSpeed = 0.20; 
         public static final boolean kMotorInverted = false; 
         public static final double kSupplyCurrentLimit = 60.0; 
-
-        // Both pistons run off these last two remaining channels
-        public static final int kPistonsForward = 5; 
-        public static final int kPistonsReverse = 7;
     }
 
     public static final class Limelight {
