@@ -19,6 +19,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public ClimbSubsystem() {
         // --- MOTOR SETUP (Kraken X60) ---
         m_motor = new TalonFX(Constants.Climb.kMotorId);
+        m_motor.setPosition(0);
         
         TalonFXConfiguration config = new TalonFXConfiguration();
         
@@ -27,11 +28,12 @@ public class ClimbSubsystem extends SubsystemBase {
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         //SoftSTOP
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 159.0; 
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 1000.0; 
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -4.5; //-1
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -1000.0; //-1
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        
 
         // Direction & Brake Mode
         config.MotorOutput.Inverted = Constants.Climb.kMotorInverted ? 
@@ -39,7 +41,7 @@ public class ClimbSubsystem extends SubsystemBase {
             InvertedValue.CounterClockwise_Positive;
             
         // MUST be brake mode so the robot doesn't drop when unpowered
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake; 
+       // config.MotorOutput.NeutralMode = NeutralModeValue.Brake; 
 
         m_motor.getConfigurator().apply(config);
 

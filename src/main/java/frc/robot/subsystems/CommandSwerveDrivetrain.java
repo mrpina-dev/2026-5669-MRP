@@ -304,8 +304,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         mapleSimSwerveDrivetrain = new MapleSimSwerveDrivetrain(
             Seconds.of(kSimLoopPeriod),
             Pounds.of(115),                 // Robot weight
-            Inches.of(30),                // Bumper Length
-            Inches.of(30),                // Bumper Width
+            Inches.of(29.5),                // Bumper Length
+            Inches.of(24.5),                // Bumper Width
             DCMotor.getKrakenX60(1),      // Drive Motor model
             DCMotor.getKrakenX60(1),      // Steer Motor model
             1.2,                          // Tire COF (Coefficient of Friction)

@@ -82,7 +82,7 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController driverController = new CommandXboxController(Constants.Operator.kDriverControllerPort);
+    public final CommandXboxController driverController = new CommandXboxController(Constants.Operator.kDriverControllerPort);
     private final CommandXboxController operator = new CommandXboxController(Constants.Operator.kOperatorControllerPort);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -216,6 +216,10 @@ public class RobotContainer {
             new FuelHandlingCommand(index, shooterIntake, shooter, false)
         );
 
+        driverController.b().whileTrue(new RunGroundIntakeCommand(groundIntake));
+
+        operator.b().whileTrue(new RunGroundIntakeCommand(groundIntake));
+
         // --- GOOBA TOGGLE (Single Button 'B') ---
         driverController.b().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
@@ -273,4 +277,22 @@ public class RobotContainer {
         return autoChooser.getSelected();
 
     }
+
+    public boolean isHubOpenForUs() {
+    var alliance = edu.wpi.first.wpilibj.DriverStation.getAlliance();
+    String gameData = edu.wpi.first.wpilibj.DriverStation.getGameSpecificMessage();
+
+    if (alliance.isPresent() && gameData != null && !gameData.isEmpty()) {
+        char turn = gameData.toUpperCase().charAt(0);
+        boolean isRedTurn = (turn == 'R');
+        boolean isBlueTurn = (turn == 'B');
+
+        if (alliance.get() == edu.wpi.first.wpilibj.DriverStation.Alliance.Red) {
+            return isRedTurn;
+        } else {
+            return isBlueTurn;
+        }
+    }
+    return false; // Default to false if data is missing
+}
 }
