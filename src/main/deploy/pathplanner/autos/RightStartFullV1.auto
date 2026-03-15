@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right-to-Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Rotate180Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-RightEnding1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right-to-Pickup-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Rotate180Right2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-RightEnding2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
