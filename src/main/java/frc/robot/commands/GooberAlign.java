@@ -21,6 +21,8 @@ public class GooberAlign extends Command {
         this.limelight = limelight;
         this.turret = turret;
         addRequirements(turret, limelight);
+
+        
         
         turnPID.setTolerance(Constants.Turret.kToleranceDegrees); 
     }
@@ -34,7 +36,7 @@ public class GooberAlign extends Command {
 
         
 
-        double tx = limelight.getNewTX();
+        double tx = -limelight.getNewTX();
         double pidOutput = turnPID.calculate(tx, 0.0);
 
         double clampedOutput = MathUtil.clamp(

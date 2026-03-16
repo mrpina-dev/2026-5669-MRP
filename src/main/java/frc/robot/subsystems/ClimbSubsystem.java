@@ -66,12 +66,12 @@ public class ClimbSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Fetch the current motor position in rotations
-        double currentPosition = m_motor.getPosition().getValueAsDouble();
+      //  double currentPosition = m_motor.getPosition().getValueAsDouble();
         
         // Output to the RioLog/Console
-        System.out.println("Climb Motor Position: " + currentPosition);
+       // System.out.println("Climb Motor Position: " + currentPosition);
         
         // Output to SmartDashboard (highly recommended so the console doesn't lag)
-        SmartDashboard.putNumber("Climb Motor Position", currentPosition);
+        //SmartDashboard.putNumber("Climb Motor Position", currentPosition);
     }
 }

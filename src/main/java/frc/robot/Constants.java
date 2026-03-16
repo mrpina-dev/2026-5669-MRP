@@ -23,8 +23,11 @@ public final class Constants {
         public static final int kSol1Reverse = 1;
 
         // Solenoid 2 ( intake 2 Piston)
-        public static final int kSol2Forward = 3; //fixed
-        public static final int kSol2Reverse = 4;
+       // public static final int kSol2Forward = 3; //fixed
+        //public static final int kSol2Reverse = 4;
+
+        //single solenoid
+        public static final int kSolSingle = 3;
 
         // (climb ratchet marios thing idk)
         public static final int kSol3Forward = 2;
@@ -52,7 +55,7 @@ public final class Constants {
     }
 
     public static final class Index {
-        public static final int kMotorId = 18; 
+        public static final int kMotorId = 13; //FIxed
         public static final boolean kInverted = false; 
 
         public static final double kForwardSpeed = 0.5; 
@@ -60,15 +63,15 @@ public final class Constants {
     }
 
     public static final class ShooterIntake {
-        public static final int kMotorId = 19; 
+        public static final int kMotorId = 15; 
         public static final boolean kInverted = false; 
 
-        public static final double kForwardSpeed = 0.6; 
+        public static final double kForwardSpeed = 2.0; 
         public static final double kReverseSpeed = -0.6; 
     }
 
     public static final class Turret {
-        public static final int kMotorId = 61; //fixed
+        public static final int kMotorId = 14; //fixed
         public static final double kSpeedMultiplier = 0.25;
         public static final double kP = 0.05;
         public static final double kI = 0.00;
@@ -105,7 +108,7 @@ public final class Constants {
         public static final double kPositionStowed = 0.0;
         public static final double kPositionDeployed = 3.5; // [FIXME] Tune this value!
 
-        public final static double kmountAngleDegrees = 0.0;
+        public final static double kmountAngleDegrees = 36.4;
         public final static double klensheightmeters = 0.0;
         public final static double kaprilTagHeightMeters = 1.12395;
     }

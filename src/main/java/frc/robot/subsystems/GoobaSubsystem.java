@@ -57,8 +57,8 @@ public class GoobaSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
 
-        double currentPos = m_motor.getPosition().getValueAsDouble();
+        //double currentPos = m_motor.getPosition().getValueAsDouble();
 
-        System.out.println("GOOBA:" + currentPos);
+        //System.out.println("GOOBA:" + currentPos);
     }
 }

@@ -58,4 +58,5 @@ public class Mariosearcommand extends Command {
     public boolean isFinished() {
         return false; // Stay aligned as long as the button is held
     }
+    
 }

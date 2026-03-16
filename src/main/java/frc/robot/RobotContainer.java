@@ -99,6 +99,7 @@ public class RobotContainer {
     public final ClimbSubsystem climb = new ClimbSubsystem();
 
     // Pneumatics Subsystems
+    /* 
     public final PneumaticSubsystem piston1 = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId,
         Constants.Pneumatics.kSol1Forward,
@@ -108,7 +109,11 @@ public class RobotContainer {
         Constants.Pneumatics.kPcmId,
         Constants.Pneumatics.kSol2Forward,
         Constants.Pneumatics.kSol2Reverse);
+*/
 
+    public final PneumaticSubsystem IntakePiston = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId,
+         Constants.Pneumatics.kSolSingle);
     public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol3Forward, 
@@ -123,7 +128,7 @@ public class RobotContainer {
         // This MUST happen BEFORE AutoBuilder.buildAutoChooser().
 
         Marcos.registerNamedCommands(
-        shooter, index, shooterIntake, gooba, goober, rizz, brick, groundIntake, piston1, piston2
+        shooter, index, shooterIntake, gooba, goober, rizz, brick, groundIntake, IntakePiston, ClimbPiston
     );
         // AUTO CHOOSER — must come AFTER named commands
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -200,16 +205,17 @@ public class RobotContainer {
         /*LISTEN UP. DRIVERCONTROLLER IS ONLY FOR DRIVING, INTAKE AND CLIMB. OPERATOR IS FOR EVERYTHING ELSE.
         RIGHT NOW, THE DRIVERCONTROLLER STILL HAS A LOT OF STUFF FOR TESTING PURPOSES, BUT BEFORE COMP, 
         WE ARE TAKING THAT OUT -Jhonen */
+        /* 
         driverController.rightTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, true)
-        );
+        );*/  
 
         operator.rightTrigger().whileTrue(
             new FuelHandlingCommand(index, shooterIntake, shooter, true)
         );
-
+ 
         driverController.leftTrigger().whileTrue(
-            new FuelHandlingCommand(index, shooterIntake, shooter, false)
+            new FuelHandlingCommand(index, shooterIntake, shooter, true)
         );
 
         operator.leftTrigger().whileTrue(
@@ -218,7 +224,7 @@ public class RobotContainer {
 
         driverController.b().whileTrue(new RunGroundIntakeCommand(groundIntake));
 
-        operator.b().whileTrue(new RunGroundIntakeCommand(groundIntake));
+        //operator.b().whileTrue(new RunGroundIntakeCommand(groundIntake));
 
         // --- GOOBA TOGGLE (Single Button 'B') ---
         driverController.b().onTrue(new InstantCommand(() -> {
@@ -230,8 +236,11 @@ public class RobotContainer {
         }, gooba));
 
         // --- STANDARD TURRET AIMING (Back Button) ---
-        driverController.back().whileTrue(new Mariosearcommand(brick, goober));
+       // driverController.back().whileTrue(new Mariosearcommand(brick, goober));
         operator.back().whileTrue(new Mariosearcommand( brick, goober));
+        //driverController.back().whileTrue(new Mariosearcommand( brick, goober));
+
+        driverController.back().whileTrue(new GooberAlign(rizz, goober));
 
         // --- CLIMB CONTROLS (ALL COMMENTED OUT) ---
         driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
@@ -248,6 +257,8 @@ public class RobotContainer {
 
         // LEFT/RIGHT: Turret Jogging
         operator.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
+        driverController.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
+        driverController.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
         operator.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
 
         // --- PNEUMATICS CONTROLS ---
@@ -257,8 +268,9 @@ public class RobotContainer {
         }));
 
         // Toggle Piston 2 & 1 with X Button
-        driverController.x().onTrue(new TogglePneumaticCommand(piston2));
-        driverController.x().onTrue(new TogglePneumaticCommand(piston1));
+       // driverController.x().onTrue(new TogglePneumaticCommand(piston2));
+       // driverController.x().onTrue(new TogglePneumaticCommand(piston1));
+       driverController.x().onTrue(IntakePiston.runOnce(IntakePiston::toggleSingle));
 
         // --- DRIVETRAIN EXTRAS ---
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
