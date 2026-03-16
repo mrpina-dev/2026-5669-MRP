@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 3.5574733096085422,
+        "y": 0.6619928825622776
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.243548086625195,
-        "y": 6.943570136441716
+        "x": 4.935699233934565,
+        "y": 0.6224700159602446
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9334400948991703,
-        "y": 4.051138790035587
+        "x": 8.161100993377483,
+        "y": 1.0729470198675495
       },
       "prevControl": {
-        "x": 2.760612992157816,
-        "y": 4.231778742864493
+        "x": 7.801278819676847,
+        "y": 0.6916669048698812
+      },
+      "nextControl": {
+        "x": 8.408106233837067,
+        "y": 1.3346823807511488
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.40067880794702,
+        "y": 3.490504966887417
+      },
+      "prevControl": {
+        "x": 8.475542993354875,
+        "y": 0.7242414590706696
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BallCenter"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 89.40934278535316
   },
   "reversed": false,
   "folder": null,
