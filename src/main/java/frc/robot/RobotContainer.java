@@ -111,11 +111,21 @@ public class RobotContainer {
         Constants.Pneumatics.kSol2Reverse);
 */
 
-    public final PneumaticSubsystem IntakePiston = new PneumaticSubsystem(
-        Constants.Pneumatics.kPcmId,
-         Constants.Pneumatics.kSolSingle);
+   // public final PneumaticSubsystem IntakePistonR = new PneumaticSubsystem(
+   //     Constants.Pneumatics.kPcmId,
+   //      Constants.Pneumatics.kSol1Single);
+   // public final PneumaticSubsystem IntakePistonL = new PneumaticSubsystem(
+   //     Constants.Pneumatics.kPcmId,
+   //      Constants.Pneumatics.kSol2Single);
     public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
+        Constants.Pneumatics.kSol2Forward, 
+        Constants.Pneumatics.kSol2Reverse);
+    public final PneumaticSubsystem DoubleIntake = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId, 
+        Constants.Pneumatics.kSol1Forward, 
+        Constants.Pneumatics.kSol1Reverse);
+    public final PneumaticSubsystem DoubleIntake2 = new PneumaticSubsystem(Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol3Forward, 
         Constants.Pneumatics.kSol3Reverse);
 
@@ -128,7 +138,7 @@ public class RobotContainer {
         // This MUST happen BEFORE AutoBuilder.buildAutoChooser().
 
         Marcos.registerNamedCommands(
-        shooter, index, shooterIntake, gooba, goober, rizz, brick, groundIntake, IntakePiston, ClimbPiston
+        shooter, index, shooterIntake, gooba, goober, rizz, brick, groundIntake, DoubleIntake, DoubleIntake2
     );
         // AUTO CHOOSER — must come AFTER named commands
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -268,9 +278,10 @@ public class RobotContainer {
         }));
 
         // Toggle Piston 2 & 1 with X Button
-       // driverController.x().onTrue(new TogglePneumaticCommand(piston2));
-       // driverController.x().onTrue(new TogglePneumaticCommand(piston1));
-       driverController.x().onTrue(IntakePiston.runOnce(IntakePiston::toggleSingle));
+        driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake2));
+       driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake));
+      //  driverController.x().onTrue(IntakePistonR.runOnce(IntakePistonR::toggleSingle));
+      //  driverController.x().onTrue(IntakePistonL.runOnce(IntakePistonL::toggleSingle));
 
         // --- DRIVETRAIN EXTRAS ---
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));

@@ -19,19 +19,20 @@ public final class Constants {
         public static final int kPcmId = 25; //fixed
         
         // Solenoid 1 (e.g. Intake Piston)
-        public static final int kSol1Forward = 0; //fixed
-        public static final int kSol1Reverse = 1;
+        public static final int kSol1Forward = 4; //fixed
+        public static final int kSol1Reverse = 5;
 
         // Solenoid 2 ( intake 2 Piston)
-       // public static final int kSol2Forward = 3; //fixed
-        //public static final int kSol2Reverse = 4;
+       public static final int kSol2Forward = 2; //fixed
+        public static final int kSol2Reverse = 3;
 
         //single solenoid
-        public static final int kSolSingle = 3;
+        public static final int kSol1Single = 0;
+        public static final int kSolSingle = 1;
 
         // (climb ratchet marios thing idk)
-        public static final int kSol3Forward = 2;
-        public static final int kSol3Reverse = 6;
+        public static final int kSol3Forward = 6;
+        public static final int kSol3Reverse = 7;
     }
 
     // --- SHOOTER (KEPT EXACTLY AS UPLOADED) ---

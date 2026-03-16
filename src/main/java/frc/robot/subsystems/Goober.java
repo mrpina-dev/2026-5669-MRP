@@ -16,7 +16,7 @@ public class Goober extends SubsystemBase {
 
     public Goober() {
 
-    configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = -90.0;  //-20.0
+    configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -90.0;  //-20.0
     configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
     configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 28.0; //20.0
