@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.3461175496688735,
-        "y": 3.4832450331125817
+        "x": 6.825273178807946,
+        "y": 3.642963576158939
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.45501655629139,
-        "y": 4.601274834437085
+        "x": 6.934172185430463,
+        "y": 4.760993377483442
       },
       "isLocked": false,
       "linkedName": "RightPickupEnd2"
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5048426150121076,
-      "rotationDegrees": -179.5505718743638
+      "waypointRelativePos": 0.7324455205811147,
+      "rotationDegrees": -136.03
     }
   ],
   "constraintZones": [],
@@ -46,13 +46,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": -88.66778014613048
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 91.16913932790762
   },
   "useDefaultConstraints": true
