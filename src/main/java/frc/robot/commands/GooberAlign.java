@@ -1,61 +1,54 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Goober;
 import frc.robot.subsystems.LimelightSubsystem;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.MathUtil;
 
 public class GooberAlign extends Command {
     private final LimelightSubsystem limelight;
     private final Goober turret;
-
-    private final PIDController turnPID = new PIDController(
-        Constants.Turret.kP, 
-        Constants.Turret.kI, 
-        Constants.Turret.kD
-    );
+    private int seekDirection = 0;
 
     public GooberAlign(LimelightSubsystem limelight, Goober turret) {
         this.limelight = limelight;
         this.turret = turret;
         addRequirements(turret, limelight);
-
-        
-        
-        turnPID.setTolerance(Constants.Turret.kToleranceDegrees); 
     }
 
     @Override
     public void execute() {
-        if (!limelight.isTargetAvailable()) {
-            turret.stop();
-            return;
+        if (limelight.isTargetAvailable()) {
+            seekDirection = 0;
+            double tx = -limelight.getNewTX();
+            turret.aimAtTarget(tx);
+        } else {
+            double currentPosition = turret.getPosition();
+
+            // The Unwrap Trigger (1 rotation before hitting hard limits)
+            if (currentPosition >= 27.0) {
+                seekDirection = -1; 
+            } else if (currentPosition <= -89.0) {
+                seekDirection = 1;  
+            }
+
+            if (seekDirection == 1) {
+                turret.setMotorSpeed(1.0); 
+            } else if (seekDirection == -1) {
+                turret.setMotorSpeed(-1.0);
+            } else {
+                turret.stop();
+            }
         }
-
-        
-
-        double tx = -limelight.getNewTX();
-        double pidOutput = turnPID.calculate(tx, 0.0);
-
-        double clampedOutput = MathUtil.clamp(
-            pidOutput, 
-            -Constants.Turret.kMaxOutput, 
-            Constants.Turret.kMaxOutput
-        );
-
-        turret.setMotorSpeed(-clampedOutput);
     }
 
     @Override
     public boolean isFinished() {
-       // return limelight.isTargetAvailable() && turnPID.atSetpoint();
        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         turret.stop();
+        seekDirection = 0; 
     }
 }

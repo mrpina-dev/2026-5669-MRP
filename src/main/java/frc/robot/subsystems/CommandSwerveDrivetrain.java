@@ -37,8 +37,6 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
-import frc.robot.sim.MapleSimSwerveDrivetrain;
-
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
@@ -273,10 +271,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void periodic() {
         /*
          * Periodically try to apply the operator perspective.
-         * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.
-         * This allows us to correct the perspective in case the robot code restarts mid-match.
-         * Otherwise, only check and apply the operator perspective if the DS is disabled.
-         * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
@@ -287,6 +281,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 );
                 m_hasAppliedOperatorPerspective = true;
             });
+        }
+
+        // FUSE VISION INTO ODOMETRY TO PREVENT DRIFT
+        frc.robot.LimelightHelpers.PoseEstimate limelightMeasurement = frc.robot.LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        
+        // Ensure the Limelight actually sees a tag before updating odometry
+        if (limelightMeasurement != null && limelightMeasurement.tagCount > 0) {
+            addVisionMeasurement(
+                limelightMeasurement.pose, 
+                limelightMeasurement.timestampSeconds
+            );
         }
 
         DogLog.log("BatteryVoltage", RobotController.getBatteryVoltage());
@@ -303,9 +308,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private void startSimThread() {
         mapleSimSwerveDrivetrain = new MapleSimSwerveDrivetrain(
             Seconds.of(kSimLoopPeriod),
-            Pounds.of(115),                 // Robot weight
-            Inches.of(29.5),                // Bumper Length
-            Inches.of(24.5),                // Bumper Width
+            Pounds.of(115),               // Robot weight
+            Inches.of(29.5),              // Bumper Length
+            Inches.of(24.5),              // Bumper Width
             DCMotor.getKrakenX60(1),      // Drive Motor model
             DCMotor.getKrakenX60(1),      // Steer Motor model
             1.2,                          // Tire COF (Coefficient of Friction)
@@ -315,7 +320,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             TunerConstants.FrontLeft,
             TunerConstants.FrontRight,
             TunerConstants.BackLeft,
-           TunerConstants.BackRight             // The regulated constants from the superclass
+            TunerConstants.BackRight      // The regulated constants from the superclass
         );
 
         /* Run simulation at the high-frequency rate */
