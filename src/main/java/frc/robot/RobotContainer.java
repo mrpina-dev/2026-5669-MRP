@@ -6,13 +6,10 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -23,7 +20,6 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -46,10 +42,7 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.commands.RunShooterCommand;
 import frc.robot.commands.FuelHandlingCommand;
 import frc.robot.commands.FeedShooterCommand;
-import frc.robot.commands.GoobaToggleCommand;
-import frc.robot.commands.AutoGooba;
 import frc.robot.commands.GooberAlign;
-import frc.robot.commands.Mariosearcommand;
 import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
@@ -70,9 +63,6 @@ public class RobotContainer {
             .withDeadband(MaxSpeed * Constants.Operator.kDeadband)
             .withRotationalDeadband(MaxAngularRate * Constants.Operator.kRotationalDeadband)
             .withDriveRequestType(DriveRequestType.Velocity);
-
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final SlewRateLimiter xLimiter = new SlewRateLimiter(3.0);
     private final SlewRateLimiter yLimiter = new SlewRateLimiter(3.0);
@@ -113,7 +103,6 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autoChooser;
 
-    // STATE VARIABLE FOR CONTINUOUS TURRET AIMING
     private boolean m_continuousTurretAim = false;
 
     public RobotContainer() {
@@ -149,7 +138,6 @@ public class RobotContainer {
         // --- DRIVER CONTROLLER (PORT 0) ---
         // ==========================================
 
-        // Swerve Drive
         drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> {
                 double xInput = -driverController.getLeftY();
@@ -183,35 +171,27 @@ public class RobotContainer {
         );
 
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-
-        // Ground Intake (Motor & Pneumatics)
         driverController.rightTrigger().whileTrue(new RunGroundIntakeCommand(groundIntake));
         driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake2));
         driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake));
 
-        // Climb controls
         driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
         driverController.povUp().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
         driverController.povDown().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
+
+        // Testing Commands now use the Constants variable
+        driverController.povLeft().whileTrue(new RunCommand(() -> shooter.testLeaderOnly(Constants.Shooter.kTestingRPM), shooter));
+        driverController.povRight().whileTrue(new RunCommand(() -> shooter.testFollowerOnly(Constants.Shooter.kTestingRPM), shooter));
 
 
         // ==========================================
         // --- OPERATOR CONTROLLER (PORT 1) ---
         // ==========================================
 
-        // 1. Wind up the shooter (Left Trigger)
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
-
-        // 2. Feed the game piece into the shooter (Right Trigger)
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
-
-        //Right Trigger Originally 
-        //SD sd Sd sd SD sd SD sd SD 
-
-        // 3. Reverse Sequence / Unjam (B Button)
         operator.b().whileTrue(new FuelHandlingCommand(index, shooterIntake, shooter, false));
 
-        // Gooba (Hood) Toggle
         operator.y().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
                 gooba.setPosition(Constants.Gooba.kPositionStowed);
@@ -220,27 +200,20 @@ public class RobotContainer {
             }
         }, gooba));
 
-        // --- TURRET AIMING LOGIC ---
-        // Toggle the state variable when Right Bumper is pressed
         operator.rightBumper().onTrue(new InstantCommand(() -> {
             m_continuousTurretAim = !m_continuousTurretAim;
         }));
 
-        // Create a Trigger that is true whenever our boolean is true
         Trigger continuousAimTrigger = new Trigger(() -> m_continuousTurretAim);
-
-        // 1. If Continuous Toggle is ON, track automatically
         continuousAimTrigger.whileTrue(new GooberAlign(rizz, goober));
-
-        // 2. If Continuous Toggle is OFF, allow Manual Hold on Left Bumper
         operator.leftBumper().and(continuousAimTrigger.negate()).whileTrue(new GooberAlign(rizz, goober));
 
-
-        // --- MANUAL JOGGING (D-PAD) ---
-        operator.povUp().whileTrue(new ManualGoobaCommand(gooba, true));
-        operator.povDown().whileTrue(new ManualGoobaCommand(gooba, false));
-        operator.povLeft().whileTrue(new ManualTurretCommand(goober, -0.4));
-        operator.povRight().whileTrue(new ManualTurretCommand(goober, 0.4));
+        operator.povUp().whileTrue(new ManualGoobaCommand(gooba, false));
+        operator.povDown().whileTrue(new ManualGoobaCommand(gooba, true));
+        
+        // Manual Turret Commands now use the Constants variable
+        operator.povLeft().whileTrue(new ManualTurretCommand(goober, -Constants.Turret.kManualJogSpeed));
+        operator.povRight().whileTrue(new ManualTurretCommand(goober, Constants.Turret.kManualJogSpeed));
 
 
         // ==========================================

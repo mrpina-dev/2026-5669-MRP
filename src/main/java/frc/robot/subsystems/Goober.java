@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,6 +20,9 @@ public class Goober extends SubsystemBase {
     private final PIDController turnPID = new PIDController(
         Constants.Turret.kP, Constants.Turret.kI, Constants.Turret.kD
     );
+
+    // JITTER FIX: A moving average filter to smooth out Limelight pixel noise
+    private final LinearFilter txFilter = LinearFilter.movingAverage(5);
 
     public Goober() {
         configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -90.0;
@@ -37,14 +41,24 @@ public class Goober extends SubsystemBase {
         motor.setControl(request.withOutput(percent * Constants.Turret.kSpeedMultiplier));
     }
 
-    public void aimAtTarget(double tx) {
-        double pidOutput = turnPID.calculate(tx, 0.0);
-        double clampedOutput = MathUtil.clamp(
-            pidOutput, 
-            -Constants.Turret.kMaxOutput, 
-            Constants.Turret.kMaxOutput
-        );
-        setMotorSpeed(-clampedOutput);
+    public void aimAtTarget(double rawTx) {
+        // Run the raw Limelight data through our filter to smooth the noise
+        double smoothedTx = txFilter.calculate(rawTx);
+
+        double pidOutput = turnPID.calculate(smoothedTx, 0.0);
+        
+        // JITTER FIX: If we are close enough to the target, cut power completely
+        // so the motor stops fighting tiny gearbox vibrations.
+        if (turnPID.atSetpoint()) {
+            stop();
+        } else {
+            double clampedOutput = MathUtil.clamp(
+                pidOutput, 
+                -Constants.Turret.kMaxOutput, 
+                Constants.Turret.kMaxOutput
+            );
+            setMotorSpeed(-clampedOutput);
+        }
     }
 
     public double getPosition() {

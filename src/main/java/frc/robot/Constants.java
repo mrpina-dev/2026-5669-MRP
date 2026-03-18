@@ -35,13 +35,18 @@ public final class Constants {
         public static final int kLeaderId = 16; 
         public static final int kFollowerId = 17; 
         
-        public static final boolean kLeaderInverted = true; 
+        public static final boolean kLeaderInverted = false; 
+        public static final boolean kFollowerInverted = true; 
 
-        public static final double kfastTargetRPM = 5000.0; 
-        public static final double kslowTargetRPM = 2500.0;
-        public static final double kReverseRPM = -1000.0; 
+        // ==========================================
+        // EASY SPEED CONTROLS
+        // ==========================================
+        // Change these to adjust how fast the flywheels spin
+        public static final double kfastTargetRPM = 5000; // Left Trigger (Main Shot)
+        public static final double kslowTargetRPM = 2500.0; // Slower Shot
+        public static final double kReverseRPM = -1000.0;   // B Button (Unjam)
+        public static final double kTestingRPM = 1500.0;    // Driver D-Pad (Testing)
         
-        // Reverted to original values
         public static final double kP = -0.11;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
@@ -61,8 +66,6 @@ public final class Constants {
 
     public static final class ShooterIntake {
         public static final int kMotorId = 15; 
-        
-        // CHANGED: Flipped to true to reverse the motor's physical direction
         public static final boolean kInverted = true; 
 
         public static final double kForwardSpeed = 2.0; 
@@ -72,10 +75,18 @@ public final class Constants {
     public static final class Turret {
         public static final int kMotorId = 14; 
         public static final double kSpeedMultiplier = 0.25;
-        public static final double kP = 0.05;
+        
+        // ==========================================
+        // MANUAL JOG SPEED
+        // ==========================================
+        // Increased by 50% (Was 0.4, is now 0.6)
+        public static final double kManualJogSpeed = 0.6;
+        
+        public static final double kP = 0.025; 
         public static final double kI = 0.00;
-        public static final double kD = 0.004;
-        public static final double kToleranceDegrees = 0.1;
+        public static final double kD = 0.00; 
+        public static final double kToleranceDegrees = 1.0; 
+        
         public static final double kMaxOutput = 0.3;
     }
 
