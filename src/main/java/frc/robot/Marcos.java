@@ -22,6 +22,7 @@ public class Marcos {
     ) {
          NamedCommands.registerCommand("spinUpShooter",
             new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM)
+        .withTimeout(1.5)
         );
 
         NamedCommands.registerCommand("spinUpShooterSlow",
