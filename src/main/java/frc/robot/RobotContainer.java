@@ -12,6 +12,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -39,6 +40,7 @@ import frc.robot.subsystems.GroundIntakeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem; 
 
 // Commands
+//Hashtg
 import frc.robot.commands.RunShooterCommand;
 import frc.robot.commands.FuelHandlingCommand;
 import frc.robot.commands.FeedShooterCommand;
@@ -48,6 +50,7 @@ import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
 import frc.robot.commands.RunGroundIntakeCommand;
 import frc.robot.commands.RunClimbMotorCommand;
+import frc.robot.commands.AutoGooba;
 
 public class RobotContainer {
 
@@ -190,7 +193,13 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
-        operator.b().whileTrue(new FuelHandlingCommand(index, shooterIntake, shooter, false));
+        
+        // MODIFIED: 'B' Button now independently rewinds the Index Subsystem ONLY
+        operator.b().whileTrue(new StartEndCommand(
+            () -> index.run(Constants.Index.kReverseSpeed), 
+            () -> index.stop(), 
+            index
+        ));
 
         operator.y().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
@@ -205,8 +214,16 @@ public class RobotContainer {
         }));
 
         Trigger continuousAimTrigger = new Trigger(() -> m_continuousTurretAim);
-        continuousAimTrigger.whileTrue(new GooberAlign(rizz, goober));
-        operator.leftBumper().and(continuousAimTrigger.negate()).whileTrue(new GooberAlign(rizz, goober));
+        
+        // Run both Turret Aim and Hood Auto-Adjust simultaneously when toggled ON
+        continuousAimTrigger.whileTrue(
+            new GooberAlign(rizz, goober).alongWith(new AutoGooba(gooba, rizz))
+        );
+        
+        // Run both Turret Aim and Hood Auto-Adjust simultaneously when Left Bumper is HELD
+        operator.leftBumper().and(continuousAimTrigger.negate()).whileTrue(
+            new GooberAlign(rizz, goober).alongWith(new AutoGooba(gooba, rizz))
+        );
 
         operator.povUp().whileTrue(new ManualGoobaCommand(gooba, false));
         operator.povDown().whileTrue(new ManualGoobaCommand(gooba, true));

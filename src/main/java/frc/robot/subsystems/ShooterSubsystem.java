@@ -18,24 +18,33 @@ public class ShooterSubsystem extends SubsystemBase {
         TalonFXConfiguration leaderConfig = new TalonFXConfiguration();
         TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
+        // PID & Feedforward
         leaderConfig.Slot0.kP = Constants.Shooter.kP; 
         leaderConfig.Slot0.kV = Constants.Shooter.kV;
         leaderConfig.Slot0.kI = Constants.Shooter.kI;
         leaderConfig.Slot0.kD = Constants.Shooter.kD;
-        leaderConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
-        leaderConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
-
+        
         followerConfig.Slot0.kP = Constants.Shooter.kP; 
         followerConfig.Slot0.kV = Constants.Shooter.kV;
         followerConfig.Slot0.kI = Constants.Shooter.kI;
         followerConfig.Slot0.kD = Constants.Shooter.kD;
+
+        // FIXED: Ramp Rates (now pulling 0.0 from Constants)
+        leaderConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
+        leaderConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
         followerConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
         followerConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
+
+        // ADDED: Current Limits to prevent battery brownouts
+        leaderConfig.CurrentLimits.SupplyCurrentLimit = Constants.Shooter.kSupplyCurrentLimit;
+        leaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        
+        followerConfig.CurrentLimits.SupplyCurrentLimit = Constants.Shooter.kSupplyCurrentLimit;
+        followerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         leaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-        // Configurations are now 100% independent based on the two separate booleans
         leaderConfig.MotorOutput.Inverted = Constants.Shooter.kLeaderInverted ? 
             com.ctre.phoenix6.signals.InvertedValue.Clockwise_Positive : 
             com.ctre.phoenix6.signals.InvertedValue.CounterClockwise_Positive;
@@ -57,12 +66,12 @@ public class ShooterSubsystem extends SubsystemBase {
     // --- INDEPENDENT TESTING METHODS ---
     public void testLeaderOnly(double rpm) {
         leader.setControl(m_velocityRequest.withVelocity(rpm / 60.0));
-        follower.stopMotor(); // Force the other motor to stay dead
+        follower.stopMotor(); 
     }
 
     public void testFollowerOnly(double rpm) {
         follower.setControl(m_velocityRequest.withVelocity(rpm / 60.0));
-        leader.stopMotor(); // Force the other motor to stay dead
+        leader.stopMotor(); 
     }
 
     public void stop() {
