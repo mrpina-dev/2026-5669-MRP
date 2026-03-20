@@ -4,6 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "Destruct",
+    "Left",
+    "Right",
     "Square Practice Paths"
   ],
   "autoFolders": [],
