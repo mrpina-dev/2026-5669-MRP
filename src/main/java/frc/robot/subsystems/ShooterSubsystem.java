@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -18,7 +19,6 @@ public class ShooterSubsystem extends SubsystemBase {
         TalonFXConfiguration leaderConfig = new TalonFXConfiguration();
         TalonFXConfiguration followerConfig = new TalonFXConfiguration();
 
-        // PID & Feedforward
         leaderConfig.Slot0.kP = Constants.Shooter.kP; 
         leaderConfig.Slot0.kV = Constants.Shooter.kV;
         leaderConfig.Slot0.kI = Constants.Shooter.kI;
@@ -29,18 +29,21 @@ public class ShooterSubsystem extends SubsystemBase {
         followerConfig.Slot0.kI = Constants.Shooter.kI;
         followerConfig.Slot0.kD = Constants.Shooter.kD;
 
-        // FIXED: Ramp Rates (now pulling 0.0 from Constants)
         leaderConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
         leaderConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
         followerConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
         followerConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
 
-        // ADDED: Current Limits to prevent battery brownouts
-        leaderConfig.CurrentLimits.SupplyCurrentLimit = Constants.Shooter.kSupplyCurrentLimit;
-        leaderConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        
-        followerConfig.CurrentLimits.SupplyCurrentLimit = Constants.Shooter.kSupplyCurrentLimit;
-        followerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        // REDLINE LIMITS: Aggressive limits for flywheels
+        CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
+        currentLimits.SupplyCurrentLimit = 70.0; 
+        currentLimits.SupplyCurrentLimitEnable = true;
+
+        currentLimits.StatorCurrentLimit = 120.0; // Allow massive torque for spin-up
+        currentLimits.StatorCurrentLimitEnable = true;
+
+        leaderConfig.CurrentLimits = currentLimits;
+        followerConfig.CurrentLimits = currentLimits;
 
         leaderConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         followerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -63,7 +66,6 @@ public class ShooterSubsystem extends SubsystemBase {
         follower.setControl(m_velocityRequest.withVelocity(rps));
     }
 
-    // --- INDEPENDENT TESTING METHODS ---
     public void testLeaderOnly(double rpm) {
         leader.setControl(m_velocityRequest.withVelocity(rpm / 60.0));
         follower.stopMotor(); 

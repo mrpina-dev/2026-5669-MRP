@@ -41,7 +41,7 @@ public final class Constants {
         // ==========================================
         // EASY SPEED CONTROLS
         // ==========================================
-        public static final double kfastTargetRPM = 5000.0; 
+        public static final double kfastTargetRPM = 7000.0; 
         public static final double kslowTargetRPM = 2500.0; 
         public static final double kReverseRPM = -1000.0;   
         public static final double kTestingRPM = 1500.0;    
