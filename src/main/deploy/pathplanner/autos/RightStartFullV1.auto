@@ -5,6 +5,42 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aimTurret"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "spinUpShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightStart"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right-to-Pickup"
@@ -31,7 +67,25 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
+            "name": "aimTurret"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "spinUpShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
           }
         },
         {
@@ -61,7 +115,25 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
+            "name": "aimTurret"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "spinUpShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
           }
         }
       ]
