@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3259850993377484,
-        "y": 1.479503311258277
+        "x": 3.299252669039147,
+        "y": 6.988398576512456
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1662665562870425,
-        "y": 0.557491721857891
+        "x": 3.2454567022538554,
+        "y": 7.612431791221827
       },
       "isLocked": false,
-      "linkedName": "FirstRightEnding"
+      "linkedName": "FirstLeftEnding"
     },
     {
       "anchor": {
-        "x": 4.618253311258278,
-        "y": 0.5066721854304637
+        "x": 6.473214709371295,
+        "y": 7.332692763938315
       },
       "prevControl": {
-        "x": 3.6316149504199737,
-        "y": 0.5541067220092273
+        "x": 5.921428651925587,
+        "y": 7.652010385683751
       },
       "nextControl": {
-        "x": 5.37328642384106,
-        "y": 0.4703725165562923
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.592955298013245,
-        "y": 1.1310264900662241
-      },
-      "prevControl": {
-        "x": 6.572334127163115,
-        "y": 0.4642752992453487
-      },
-      "nextControl": {
-        "x": 6.614735099337748,
-        "y": 1.8352400662251624
+        "x": 7.3175829891677555,
+        "y": 6.84405832429697
       },
       "isLocked": false,
       "linkedName": null
@@ -49,15 +33,15 @@
     {
       "anchor": {
         "x": 6.825273178807946,
-        "y": 3.642963576158939
+        "y": 4.051138790035587
       },
       "prevControl": {
-        "x": 6.861572847682119,
-        "y": 3.0766887417218536
+        "x": 6.784159635364596,
+        "y": 5.577305140465305
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RightPickupEnd2"
+      "linkedName": "LeftPickupEnd2"
     }
   ],
   "rotationTargets": [],
@@ -66,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "runGroundIntake",
-      "waypointRelativePos": 1.74275618374558,
+      "waypointRelativePos": 1.1988416988417032,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -81,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 91.16913932790762
+    "rotation": -91.9021146168237
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 57.994616791916656
+    "rotation": -38.016618852838555
   },
   "useDefaultConstraints": true
 }

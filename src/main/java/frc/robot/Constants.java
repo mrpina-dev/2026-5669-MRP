@@ -18,17 +18,12 @@ public final class Constants {
     public static final class Pneumatics {
         public static final int kPcmId = 25; 
         
-        public static final int kSol1Forward = 4; 
-        public static final int kSol1Reverse = 5;
+        public static final int kSol1Forward = 0; 
+        public static final int kSol1Reverse = 1;
 
         public static final int kSol2Forward = 2; 
         public static final int kSol2Reverse = 3;
 
-        public static final int kSol1Single = 0;
-        public static final int kSolSingle = 1;
-
-        public static final int kSol3Forward = 6;
-        public static final int kSol3Reverse = 7;
     }
 
     public static final class Shooter {

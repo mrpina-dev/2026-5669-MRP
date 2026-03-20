@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5574733096085422,
-        "y": 0.6619928825622776
+        "x": 6.825273178807946,
+        "y": 4.051138790035587
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.169038312028199,
-        "y": 0.7143728199435586
+        "x": 6.763712930011864,
+        "y": 2.835349940688019
       },
       "isLocked": false,
-      "linkedName": "RightStart"
+      "linkedName": "LeftPickupEnd2"
     },
     {
       "anchor": {
-        "x": 6.229958609271523,
-        "y": 0.8115894039735099
+        "x": 5.795385527876632,
+        "y": 4.051138790035587
       },
       "prevControl": {
-        "x": 5.333451114000106,
-        "y": 0.6940455978857636
-      },
-      "nextControl": {
-        "x": 6.625230625518882,
-        "y": 0.8634147121552623
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.132061258278146,
-        "y": 1.2907450331125825
-      },
-      "prevControl": {
-        "x": 7.8868058261012814,
-        "y": 1.2422705760476567
+        "x": 5.849181494661923,
+        "y": 2.88914590747331
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BallCenter"
+      "linkedName": "LeftRotatedPickUpEnd2"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 88.99908532243735
+    "rotation": 92.72631099390627
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Left",
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": 0.0
+    "rotation": -91.9021146168237
   },
   "useDefaultConstraints": true
 }
