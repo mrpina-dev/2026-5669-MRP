@@ -25,13 +25,28 @@ public class AutoGooba extends Command {
 
     @Override
     public void execute() {
-        double distance = m_vision.distanceToTarget();
-
         // CRITICAL FIX 2: We only want to interpolate and move if the Limelight 
-        // actually sees a target (distance > 0). If it returns 0, the target is lost, 
+        // actually sees a target. If it doesn't, the target is lost, 
         // and we want the hood to stay exactly where it is until it finds the tag again.
-        if (distance > 0.1) {
-            double targetRotations = m_gooba.getRotationValueFromDistance(distance);
+        
+        // --- DEBUG PRINTS (These run no matter what!) ---
+        boolean seesTarget = m_vision.isTargetAvailable();
+        System.out.println("[AutoGooba] Running... Target Visible? " + seesTarget);
+        // ------------------------------------------------
+
+        if (seesTarget) {
+            
+            // 1. Get the offset 'tx' from the Limelight. 
+            // Because the Limelight is on its side, 'tx' represents the real-world vertical angle!
+            double currentTx = m_vision.getTX();
+            
+            // Print TX to the terminal for calibration!
+            System.out.println("[AutoGooba] Limelight TX: " + currentTx);
+            
+            // 2. Ask the Gooba subsystem for the correct hood rotation based on the 'tx' angle
+            double targetRotations = m_gooba.getRotationValueFromTx(currentTx);
+            
+            // 3. Move the hood
             m_gooba.setPosition(targetRotations);
         }
     }

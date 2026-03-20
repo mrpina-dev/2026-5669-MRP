@@ -48,6 +48,7 @@ import frc.robot.commands.GooberAlign;
 import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
+import frc.robot.commands.ReverseFHC;
 import frc.robot.commands.RunGroundIntakeCommand;
 import frc.robot.commands.RunClimbMotorCommand;
 import frc.robot.commands.AutoGooba;
@@ -93,16 +94,13 @@ public class RobotContainer {
 
     public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
-        Constants.Pneumatics.kSol2Forward, 
-        Constants.Pneumatics.kSol2Reverse);
-    public final PneumaticSubsystem DoubleIntake = new PneumaticSubsystem(
-        Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol1Forward, 
         Constants.Pneumatics.kSol1Reverse);
-    public final PneumaticSubsystem DoubleIntake2 = new PneumaticSubsystem(
+    public final PneumaticSubsystem DoubleIntake = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
-        Constants.Pneumatics.kSol3Forward, 
-        Constants.Pneumatics.kSol3Reverse);
+        Constants.Pneumatics.kSol2Forward, 
+        Constants.Pneumatics.kSol2Reverse);
+   
 
     private final SendableChooser<Command> autoChooser;
 
@@ -110,7 +108,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         Marcos.registerNamedCommands(
-            shooter, index, shooterIntake, gooba, goober, rizz, brick, groundIntake, DoubleIntake, DoubleIntake2
+            shooter, index, shooterIntake, gooba, goober, rizz, brick, groundIntake, DoubleIntake, ClimbPiston
         );
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -175,7 +173,7 @@ public class RobotContainer {
 
         driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         driverController.rightTrigger().whileTrue(new RunGroundIntakeCommand(groundIntake));
-        driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake2));
+
         driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake));
 
         driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
@@ -193,6 +191,10 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
+<<<<<<< HEAD
+       // operator.b().whileTrue(new FuelHandlingCommand(index, shooterIntake, shooter, false));
+       operator.b().whileTrue(new ReverseFHC(index, false));
+=======
         
         // MODIFIED: 'B' Button now independently rewinds the Index Subsystem ONLY
         operator.b().whileTrue(new StartEndCommand(
@@ -200,6 +202,7 @@ public class RobotContainer {
             () -> index.stop(), 
             index
         ));
+>>>>>>> 850389c7a724fb080be1c715ba69c2d6930ea1af
 
         operator.y().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
