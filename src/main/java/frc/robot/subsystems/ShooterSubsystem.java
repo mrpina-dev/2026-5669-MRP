@@ -60,10 +60,34 @@ public class ShooterSubsystem extends SubsystemBase {
         follower.getConfigurator().apply(followerConfig);
     }
 
-    public void runAtRPM(double rpm) {
-        double rps = rpm / 60.0;
-        leader.setControl(m_velocityRequest.withVelocity(rps));
-        follower.setControl(m_velocityRequest.withVelocity(rps));
+    public void runAtRPM(double targetRpm) {
+        // 1. Get the current, physical speed of the wheel from the motor encoder
+        // (Phoenix 6 returns Rotations per Second, so we multiply by 60 to get RPM)
+        double currentPhysicalRpm = leader.getVelocity().getValueAsDouble() * 60.0;
+        double nextTargetRps;
+
+        // 2. SMOOTH SPIN-DOWN LOGIC:
+        // If the wheel is spinning much faster than our new target (e.g., dropping from 7k to idle),
+        // we don't want the PID loop to slam the brakes with reverse voltage. 
+        // We command the motor to go just a tiny bit slower than its CURRENT speed, walking it down gently.
+        if (currentPhysicalRpm > targetRpm + 100.0) {
+            
+            double gentleRampDownRpm = currentPhysicalRpm - Constants.Shooter.kDecelerateStep; 
+            
+            // Prevent overshooting the target downwards
+            if (gentleRampDownRpm < targetRpm) {
+                gentleRampDownRpm = targetRpm;
+            }
+            nextTargetRps = gentleRampDownRpm / 60.0;
+            
+        } else {
+            // If we are speeding up, or maintaining speed, apply the target instantly for max acceleration!
+            nextTargetRps = targetRpm / 60.0;
+        }
+
+        // Apply the calculated safe speed
+        leader.setControl(m_velocityRequest.withVelocity(nextTargetRps));
+        follower.setControl(m_velocityRequest.withVelocity(nextTargetRps));
     }
 
     public void testLeaderOnly(double rpm) {
