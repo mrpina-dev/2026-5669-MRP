@@ -5,63 +5,51 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "score"
+            "pathName": "DestructPath1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightStart"
+            "pathName": "DestructPath2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right-to-Pickup"
+            "pathName": "DestructPath3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Rotate180Right"
+            "pathName": "Destruct4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot-RightEnding1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score"
+            "pathName": "DestructPath1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right-to-Pickup-2"
+            "pathName": "DestructPath2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Rotate180Right2"
+            "pathName": "DestructPath3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot-RightEnding2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score"
+            "pathName": "Destruct4"
           }
         }
       ]
