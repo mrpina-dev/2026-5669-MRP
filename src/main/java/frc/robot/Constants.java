@@ -61,8 +61,9 @@ public final class Constants {
         public static final int kMotorId = 13; 
         public static final boolean kInverted = false; 
 
-        public static final double kForwardSpeed = 0.5; 
+        public static final double kForwardSpeed = 0.1; 
         public static final double kReverseSpeed = -0.5; 
+
     }
 
     public static final class ShooterIntake {
@@ -116,7 +117,7 @@ public final class Constants {
         public static final double kManualStep = 0.04; 
 
         public final static double kmountAngleDegrees = 36.4;
-        public final static double klensheightmeters = 0.0;
+        public final static double klensheightmeters = 0.432;
         public final static double kaprilTagHeightMeters = 1.12395;
     }
 

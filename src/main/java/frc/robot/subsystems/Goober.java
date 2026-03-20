@@ -73,7 +73,7 @@ public class Goober extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Turret Motor Position", getPosition());
 
-        double currentPos = motor.getPosition().getValueAsDouble();
-        System.out.println("GOOBA:" + currentPos);
+        //double currentPos = motor.getPosition().getValueAsDouble();
+        //System.out.println("GOOBA:" + currentPos);
     }
 }
