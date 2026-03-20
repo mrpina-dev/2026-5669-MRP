@@ -76,9 +76,20 @@ public class LimelightSubsystem extends SubsystemBase {
         return (int) tid.getInteger(-1);
     }
    
-    public boolean seeID(int id){
+    /** Returns true ONLY if the limelight sees a target AND its ID is in the approved list. */
+    public boolean isValidTarget() {
+        if (!isTargetAvailable()) {
+            return false;
+        }
 
-        return isTargetAvailable() && getID() == id;
+        int currentID = getID();
+        for (int validID : Constants.Limelight.kValidTargetIds) {
+            if (currentID == validID) {
+                return true; 
+            }
+        }
+        
+        return false; 
     }
 
     public double distanceToTarget() {
@@ -96,13 +107,13 @@ public class LimelightSubsystem extends SubsystemBase {
 
         if (distance < 0.5) { return rawTX;}
 
-    //get the correction in degrees
-    double correction = Math.toDegrees(Math.atan(Constants.Limelight.kHOffsetMeters / distance));
+        //get the correction in degrees
+        double correction = Math.toDegrees(Math.atan(Constants.Limelight.kHOffsetMeters / distance));
 
-    // If camera is to the RIGHT, the shooter needs to aim further RIGHT (add)
-    // If camera is to the LEFT, the shooter needs to aim further LEFT (subtract)
-    return rawTX + correction;
-}
+        // If camera is to the RIGHT, the shooter needs to aim further RIGHT (add)
+        // If camera is to the LEFT, the shooter needs to aim further LEFT (subtract)
+        return rawTX + correction;
+    }
 
     @Override
     public void periodic() {

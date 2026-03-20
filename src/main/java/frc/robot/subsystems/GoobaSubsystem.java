@@ -31,6 +31,14 @@ public class GoobaSubsystem extends SubsystemBase {
         configs.CurrentLimits.SupplyCurrentLimit = Constants.Gooba.kSupplyCurrentLimit;
         configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+        // --- FIRMWARE SOFT LIMITS ---
+        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+        configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 10.7; 
+        configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        // ----------------------------
+
         m_motor.getConfigurator().apply(configs);
         
         // Brake Mode is essential for a servo-like mechanism
