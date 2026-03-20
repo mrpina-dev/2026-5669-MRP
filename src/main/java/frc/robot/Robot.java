@@ -26,9 +26,7 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
-    }
 
-    public void robotInit() {
         DogLog.setOptions(new DogLogOptions()
                 .withLogExtras(true)
                 .withCaptureDs(true)
@@ -36,7 +34,7 @@ public class Robot extends TimedRobot {
                 .withCaptureNt(true));
         DogLog.setPdh(new PowerDistribution());
     }
-
+ 
 
     @Override
     public void robotPeriodic() {

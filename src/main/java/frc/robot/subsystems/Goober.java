@@ -25,10 +25,10 @@ public class Goober extends SubsystemBase {
     private final LinearFilter txFilter = LinearFilter.movingAverage(5);
 
     public Goober() {
-        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -90.0;
+        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -25.0;
         configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 28.0; 
+        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 10.0; 
         configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
 
         configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -71,6 +71,13 @@ public class Goober extends SubsystemBase {
 
     @Override
     public void periodic() {
+<<<<<<< HEAD
         //SmartDashboard.putNumber("Turret Motor Position", getPosition());
+=======
+        SmartDashboard.putNumber("Turret Motor Position", getPosition());
+
+        //double currentPos = motor.getPosition().getValueAsDouble();
+        //System.out.println("GOOBA:" + currentPos);
+>>>>>>> 850389c7a724fb080be1c715ba69c2d6930ea1af
     }
 }

@@ -10,6 +10,8 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class GoobaSubsystem extends SubsystemBase {
     private final TalonFX m_motor = new TalonFX(Constants.Gooba.kMotorId);
+    
+    // The interpolation map that handles the math between your calibrated points
     private final InterpolatingDoubleTreeMap shotMap = new InterpolatingDoubleTreeMap();
     
     // Motion Magic Request (Smooth position control)
@@ -31,6 +33,14 @@ public class GoobaSubsystem extends SubsystemBase {
         configs.CurrentLimits.SupplyCurrentLimit = Constants.Gooba.kSupplyCurrentLimit;
         configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+        // --- FIRMWARE SOFT LIMITS ---
+        configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0.0;
+        configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+        configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 10.7; 
+        configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        // ----------------------------
+
         m_motor.getConfigurator().apply(configs);
         
         // Brake Mode is essential for a servo-like mechanism
@@ -39,7 +49,26 @@ public class GoobaSubsystem extends SubsystemBase {
         // Reset encoder to 0 on startup
         m_motor.setPosition(0);
 
-        shotMap.put(0.0, 0.0);
+        // ==========================================
+        // INTERPOLATION MAP (Limelight 'tx' degrees -> Hood Rotations)
+        // REPLACE THESE EXAMPLE NUMBERS WITH YOUR REAL TEST DATA
+        // Note: Ensure your rotation values stay between your soft limits (0.0 to 10.7)
+        // ==========================================
+        
+        // Point 1: Close up (Target is high in camera, large positive 'tx' because limelight is sideways)
+        shotMap.put(15.6, 0.0);
+        
+        // Point 2: Mid-Close 
+        shotMap.put(8.5, 1.80);
+        
+        // Point 3: Mid 
+        shotMap.put(1.2, 2.45); 
+        
+        // Point 4: Mid-Far (Target starts getting lower in camera view)
+        shotMap.put(-4.5, 3.10); 
+        
+        // Point 5: Deep/Trench area (Target is very low in camera view)
+        shotMap.put(-10.1, 3.75); 
     }
 
     public void setPosition(double rotations) {
@@ -50,15 +79,15 @@ public class GoobaSubsystem extends SubsystemBase {
         return m_motor.getPosition().getValueAsDouble();
     }
 
-    public double getRotationValueFromDistance(double distance) {
-        return shotMap.get(distance);
+    public double getRotationValueFromTx(double tx) {
+        return shotMap.get(tx);
     }
 
     @Override
     public void periodic(){
+        double currentPos = m_motor.getPosition().getValueAsDouble();
 
-        //double currentPos = m_motor.getPosition().getValueAsDouble();
-
-        //System.out.println("GOOBA:" + currentPos);
+        //Helpful for calibration - you can view this in your driver station console or push to SmartDashboard
+        System.out.println("GOOBA:" + currentPos);
     }
 }

@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -22,10 +23,21 @@ public class Marcos {
     ) {
          NamedCommands.registerCommand("spinUpShooter",
             new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM)
+        .withTimeout(1.5)
         );
 
         NamedCommands.registerCommand("spinUpShooterSlow",
             new RunShooterCommand(shooter, Constants.Shooter.kslowTargetRPM)
+        .withTimeout(1.5)
+        );
+
+        NamedCommands.registerCommand("score",
+            new SequentialCommandGroup(
+                new GooberAlign(rizz, goober).withTimeout(2.0),
+                new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM).withTimeout(1.5),
+                new FuelHandlingCommand(index, shooterIntake, shooter, true).withTimeout(2.0),
+                new InstantCommand(() -> shooter.stop(), shooter)
+            )
         );
 
         // ADDED TIMEOUT TO PREVENT AUTO HANGS
@@ -44,7 +56,7 @@ public class Marcos {
 
         // ADDED TIMEOUT
         NamedCommands.registerCommand("runGroundIntake",
-            new RunGroundIntakeCommand(groundIntake).withTimeout(2.0)
+            new RunGroundIntakeCommand(groundIntake).withTimeout(5.0)
         );
 
         NamedCommands.registerCommand("deployGooba",

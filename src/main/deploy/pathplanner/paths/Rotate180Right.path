@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.628899094758033,
-        "y": 3.308486367754096
+        "x": 8.333453023628916,
+        "y": 3.2138277359508445
       },
       "isLocked": false,
       "linkedName": "BallCenter"
     },
     {
       "anchor": {
-        "x": 7.725504966887417,
-        "y": 3.984180463576158
+        "x": 7.602086092715233,
+        "y": 4.027740066225165
       },
       "prevControl": {
-        "x": 7.846192291339888,
-        "y": 4.203120112147412
+        "x": 7.7736541702259325,
+        "y": 4.24901521745009
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,13 +30,20 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3922518159806263,
+      "waypointRelativePos": 0.4,
       "rotationDegrees": 110.07617699273142
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "runGroundIntake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

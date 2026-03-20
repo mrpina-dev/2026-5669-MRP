@@ -30,33 +30,35 @@ public final class Constants {
         public static final int kLeaderId = 16; 
         public static final int kFollowerId = 17; 
         
-        public static final boolean kLeaderInverted = false; 
-        public static final boolean kFollowerInverted = true; 
+        public static final boolean kLeaderInverted = true; 
+        public static final boolean kFollowerInverted = false; 
 
         // ==========================================
         // EASY SPEED CONTROLS
         // ==========================================
-        // Change these to adjust how fast the flywheels spin
-        public static final double kfastTargetRPM = 5000; // Left Trigger (Main Shot)
-        public static final double kslowTargetRPM = 2500.0; // Slower Shot
-        public static final double kReverseRPM = -1000.0;   // B Button (Unjam)
-        public static final double kTestingRPM = 1500.0;    // Driver D-Pad (Testing)
+        public static final double kfastTargetRPM = 7000.0; 
+        public static final double kslowTargetRPM = 2500.0; 
+        public static final double kReverseRPM = -1000.0;   
+        public static final double kTestingRPM = 1500.0;    
         
-        public static final double kP = -0.11;
+        public static final double kP = 0.11;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
-        public static final double kV = 0.0;
+        public static final double kV = 0.12;
 
-        public static final double kVoltageRampPeriod = 100.0;
-        public static final double kDutyCycleRampPeriod = 100.0;
+        public static final double kSupplyCurrentLimit = 60.0;
+
+        public static final double kVoltageRampPeriod = 0.0;
+        public static final double kDutyCycleRampPeriod = 0.0;
     }
 
     public static final class Index {
         public static final int kMotorId = 13; 
         public static final boolean kInverted = false; 
 
-        public static final double kForwardSpeed = 0.5; 
+        public static final double kForwardSpeed = 0.1; 
         public static final double kReverseSpeed = -0.5; 
+
     }
 
     public static final class ShooterIntake {
@@ -69,20 +71,17 @@ public final class Constants {
 
     public static final class Turret {
         public static final int kMotorId = 14; 
-        public static final double kSpeedMultiplier = 0.25;
+        public static final double kSpeedMultiplier = 0.75;
         
-        // ==========================================
-        // MANUAL JOG SPEED
-        // ==========================================
-        // Increased by 50% (Was 0.4, is now 0.6)
-        public static final double kManualJogSpeed = 0.6;
+        public static final double kManualJogSpeed = 0.2;
+        public static final double kSweepSpeed = 1.0;
         
         public static final double kP = 0.025; 
         public static final double kI = 0.00;
         public static final double kD = 0.00; 
         public static final double kToleranceDegrees = 1.0; 
         
-        public static final double kMaxOutput = 0.3;
+        public static final double kMaxOutput = 0.8;
     }
 
     public static final class Auton {
@@ -109,8 +108,11 @@ public final class Constants {
         public static final double kPositionStowed = 0.0;
         public static final double kPositionDeployed = 3.5; 
 
+        // ADDED: The 4x faster manual step limit for the D-Pad commands
+        public static final double kManualStep = 0.04; 
+
         public final static double kmountAngleDegrees = 36.4;
-        public final static double klensheightmeters = 0.0;
+        public final static double klensheightmeters = 0.432;
         public final static double kaprilTagHeightMeters = 1.12395;
     }
 
@@ -132,5 +134,7 @@ public final class Constants {
 
     public static final class Limelight {
         public static final double kHOffsetMeters = 1.5 * 0.0254;
+        
+        public static final int[] kValidTargetIds = {7, 8}; 
     }
 }

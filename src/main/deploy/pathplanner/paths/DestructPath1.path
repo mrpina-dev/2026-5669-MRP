@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5220033112582776,
+        "y": 0.6300910596026483
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.522003311258281,
+        "y": 0.6300910596026483
+      },
+      "isLocked": false,
+      "linkedName": "DestructStart"
+    },
+    {
+      "anchor": {
+        "x": 10.389900662251655,
+        "y": 1.051167218543046
+      },
+      "prevControl": {
+        "x": 9.98967822410007,
+        "y": 0.65094478039146
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Destruct1End"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 90.61605990839925
+  },
+  "reversed": false,
+  "folder": "Destruct",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
