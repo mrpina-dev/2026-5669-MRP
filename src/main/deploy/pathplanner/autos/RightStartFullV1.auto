@@ -5,18 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "score"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightStart"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Right-to-Pickup"
@@ -37,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
+            "name": "scorePreload"
           }
         },
         {
@@ -61,7 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
+            "name": "scorePreload"
           }
         }
       ]
