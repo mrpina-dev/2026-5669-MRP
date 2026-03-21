@@ -195,18 +195,7 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
-<<<<<<< HEAD
-       // operator.b().whileTrue(new FuelHandlingCommand(index, shooterIntake, shooter, false));
-       operator.b().whileTrue(new ReverseFHC(index, false));
-=======
-        
-        // 'B' Button now independently rewinds the Index Subsystem ONLY
-        operator.b().whileTrue(new StartEndCommand(
-            () -> index.run(Constants.Index.kReverseSpeed), 
-            () -> index.stop(), 
-            index
-        ));
->>>>>>> 850389c7a724fb080be1c715ba69c2d6930ea1af
+        operator.b().whileTrue(new ReverseFHC(index, false));
 
         operator.y().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
