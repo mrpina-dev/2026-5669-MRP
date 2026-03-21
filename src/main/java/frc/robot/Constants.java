@@ -147,6 +147,6 @@ public final class Constants {
     public static final class Limelight {
         public static final double kHOffsetMeters = 1.5 * 0.0254;
         
-        public static final int[] kValidTargetIds = {7, 8, 10}; 
+        public static final int[] kValidTargetIds = {10, 18, 21, 26, 5, 2}; 
     }
 }

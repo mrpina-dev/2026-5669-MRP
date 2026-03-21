@@ -17,7 +17,7 @@ public class GooberAlign extends Command {
 
     @Override
     public void execute() {
-        if (limelight.isTargetAvailable()) {
+        if (limelight.isTargetAvailable() && limelight.isValidTarget()) {
             seekDirection = 0;
             double tx = -limelight.getNewTX();
             turret.aimAtTarget(tx);
