@@ -18,12 +18,17 @@ public final class Constants {
     public static final class Pneumatics {
         public static final int kPcmId = 25; 
         
-        public static final int kSol1Forward = 0; 
-        public static final int kSol1Reverse = 1;
+        public static final int kSol1Forward = 1; 
+        public static final int kSol1Reverse = 0;
 
         public static final int kSol2Forward = 2; 
         public static final int kSol2Reverse = 3;
 
+       // public static final int kSol1Single = 0;
+       // public static final int kSolSingle = 1;
+
+        public static final int kSol3Forward = 6;
+        public static final int kSol3Reverse = 7;
     }
 
     public static final class Shooter {
@@ -44,9 +49,8 @@ public final class Constants {
         // --- IDLE SPEED ---
         public static final double kIdleRPM = 1400.0; 
         
-        // --- ADDED: DECELERATION RAMP ---
+        // --- DECELERATION RAMP ---
         // Subtracts this much RPM every 20ms when dropping from High Speed to Idle
-        // 60.0 means it drops ~3000 RPM per second (takes ~1.8s to smoothly hit idle).
         public static final double kDecelerateStep = 60.0; 
         
         public static final double kP = 0.11;
@@ -83,13 +87,15 @@ public final class Constants {
         public static final double kManualJogSpeed = 0.2;
         public static final double kSweepSpeed = 1.0;
         
-        public static final double kP = 0.022; 
+        public static final double kP = 0.020; //
         public static final double kI = 0.00;
-        public static final double kD = 0.002; 
+        public static final double kD = 0.001; // 0.001
         public static final double kToleranceDegrees = 1.0; 
         
-        public static final double kMaxOutput = 0.8;
+        public static final double kMaxOutput = 0.5;
     }
+
+    //i love gaaaaaabbaaa
 
     public static final class Auton {
         public static final double kDriveSpeed = 0.5;
@@ -141,6 +147,6 @@ public final class Constants {
     public static final class Limelight {
         public static final double kHOffsetMeters = 1.5 * 0.0254;
         
-        public static final int[] kValidTargetIds = {7, 8}; 
+        public static final int[] kValidTargetIds = {7, 8, 10}; 
     }
 }

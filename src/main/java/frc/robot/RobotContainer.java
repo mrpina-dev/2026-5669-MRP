@@ -48,7 +48,6 @@ import frc.robot.commands.GooberAlign;
 import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
-import frc.robot.commands.ReverseFHC;
 import frc.robot.commands.RunGroundIntakeCommand;
 import frc.robot.commands.RunClimbMotorCommand;
 import frc.robot.commands.AutoGooba;
@@ -178,6 +177,7 @@ public class RobotContainer {
         driverController.rightTrigger().whileTrue(new RunGroundIntakeCommand(groundIntake));
 
         driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake));
+        driverController.a().onTrue(new TogglePneumaticCommand(ClimbPiston));
 
         driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
         driverController.povUp().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
@@ -195,12 +195,7 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
-<<<<<<< HEAD
-       // operator.b().whileTrue(new FuelHandlingCommand(index, shooterIntake, shooter, false));
-       operator.b().whileTrue(new ReverseFHC(index, false));
-<<<<<<< HEAD
-=======
-=======
+
         
         // 'B' Button now independently rewinds the Index Subsystem ONLY
         operator.b().whileTrue(new StartEndCommand(
@@ -208,11 +203,6 @@ public class RobotContainer {
             () -> index.stop(), 
             index
         ));
->>>>>>> 850389c7a724fb080be1c715ba69c2d6930ea1af
->>>>>>> 66a08fd68f9fd844a08c4f5122b4ca0351d83d7a
-=======
-        operator.b().whileTrue(new ReverseFHC(index, false));
->>>>>>> origin/claude/test-path-planner-commands-Zqb2Z
 
         operator.y().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
