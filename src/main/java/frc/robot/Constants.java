@@ -41,6 +41,14 @@ public final class Constants {
         public static final double kReverseRPM = -1000.0;   
         public static final double kTestingRPM = 1500.0;    
         
+        // --- IDLE SPEED ---
+        public static final double kIdleRPM = 1400.0; 
+        
+        // --- ADDED: DECELERATION RAMP ---
+        // Subtracts this much RPM every 20ms when dropping from High Speed to Idle
+        // 60.0 means it drops ~3000 RPM per second (takes ~1.8s to smoothly hit idle).
+        public static final double kDecelerateStep = 60.0; 
+        
         public static final double kP = 0.11;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
@@ -56,9 +64,8 @@ public final class Constants {
         public static final int kMotorId = 13; 
         public static final boolean kInverted = false; 
 
-        public static final double kForwardSpeed = 0.1; 
+        public static final double kForwardSpeed = 0.5; 
         public static final double kReverseSpeed = -0.5; 
-
     }
 
     public static final class ShooterIntake {
@@ -76,9 +83,9 @@ public final class Constants {
         public static final double kManualJogSpeed = 0.2;
         public static final double kSweepSpeed = 1.0;
         
-        public static final double kP = 0.025; 
+        public static final double kP = 0.022; 
         public static final double kI = 0.00;
-        public static final double kD = 0.00; 
+        public static final double kD = 0.002; 
         public static final double kToleranceDegrees = 1.0; 
         
         public static final double kMaxOutput = 0.8;
@@ -108,11 +115,10 @@ public final class Constants {
         public static final double kPositionStowed = 0.0;
         public static final double kPositionDeployed = 3.5; 
 
-        // ADDED: The 4x faster manual step limit for the D-Pad commands
         public static final double kManualStep = 0.04; 
 
         public final static double kmountAngleDegrees = 36.4;
-        public final static double klensheightmeters = 0.432;
+        public final static double klensheightmeters = 0.0;
         public final static double kaprilTagHeightMeters = 1.12395;
     }
 
