@@ -195,6 +195,7 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
+<<<<<<< HEAD
        // operator.b().whileTrue(new FuelHandlingCommand(index, shooterIntake, shooter, false));
        operator.b().whileTrue(new ReverseFHC(index, false));
 <<<<<<< HEAD
@@ -209,6 +210,9 @@ public class RobotContainer {
         ));
 >>>>>>> 850389c7a724fb080be1c715ba69c2d6930ea1af
 >>>>>>> 66a08fd68f9fd844a08c4f5122b4ca0351d83d7a
+=======
+        operator.b().whileTrue(new ReverseFHC(index, false));
+>>>>>>> origin/claude/test-path-planner-commands-Zqb2Z
 
         operator.y().onTrue(new InstantCommand(() -> {
             if (Math.abs(gooba.getPosition()) > 1.0) {
