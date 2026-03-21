@@ -195,6 +195,7 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
+
         
         // 'B' Button now independently rewinds the Index Subsystem ONLY
         operator.b().whileTrue(new StartEndCommand(
