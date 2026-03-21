@@ -90,11 +90,14 @@ public class RobotContainer {
     public final MariosEar brick = new MariosEar(rizz);
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
     public final ClimbSubsystem climb = new ClimbSubsystem();
-
+/* 
     public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol1Forward, 
         Constants.Pneumatics.kSol1Reverse);
+        */
+    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId, 0);
     public final PneumaticSubsystem DoubleIntake = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol2Forward, 
@@ -179,7 +182,7 @@ public class RobotContainer {
         driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake));
         driverController.a().onTrue(new TogglePneumaticCommand(ClimbPiston));
 
-        driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
+        //driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
         driverController.povUp().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
         driverController.povDown().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
