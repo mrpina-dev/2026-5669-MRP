@@ -131,7 +131,7 @@ public final class Constants {
     public static final class GroundIntake {
         public static final int kMotorId = 20; 
         public static final boolean kInverted = false; 
-        public static final double kIntakeSpeed = 0.75; 
+        public static final double kIntakeSpeed = 1.0; 
 
         public static final double kSupplyCurrentLimit = 40.0;
     }
