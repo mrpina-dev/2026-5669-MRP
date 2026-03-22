@@ -60,8 +60,8 @@ public final class Constants {
 
         public static final double kSupplyCurrentLimit = 60.0;
 
-        public static final double kVoltageRampPeriod = 0.0;
-        public static final double kDutyCycleRampPeriod = 0.0;
+        public static final double kVoltageRampPeriod = 0.25;
+        public static final double kDutyCycleRampPeriod = 0.25;
     }
 
     public static final class Index {

@@ -22,10 +22,10 @@ public class IndexSubsystem extends SubsystemBase {
 
         // REDLINE LIMITS: Maximum power without triggering hardware fault
         CurrentLimitsConfigs currentLimits = config.CurrentLimits;
-        currentLimits.SupplyCurrentLimit = 60.0; // Max draw from battery
+        currentLimits.SupplyCurrentLimit = 30.0; // Max draw from battery
         currentLimits.SupplyCurrentLimitEnable = true;
 
-        currentLimits.StatorCurrentLimit = 80.0; // Max push to motor coils
+        currentLimits.StatorCurrentLimit = 40.0; // Max push to motor coils
         currentLimits.StatorCurrentLimitEnable = true;
         
         motor.getConfigurator().apply(config);
