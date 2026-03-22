@@ -34,7 +34,7 @@ public class Marcos {
         NamedCommands.registerCommand("score",
             new SequentialCommandGroup(
                 new GooberAlign(rizz, goober).withTimeout(2.0),
-                new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM).withTimeout(5.5),
+                new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM).withTimeout(5),
                 new FuelHandlingCommand(index, shooterIntake, shooter, true).withTimeout(2.0),
                 new InstantCommand(() -> shooter.stop(), shooter)
             )
