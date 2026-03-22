@@ -43,7 +43,7 @@ public class Marcos {
         // Score preloaded balls without any vision/limelight tracking
         NamedCommands.registerCommand("scorePreload",
             new SequentialCommandGroup(
-                new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM).withTimeout(1.5),
+                new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM).withTimeout(5.5),
                 new FuelHandlingCommand(index, shooterIntake, shooter, true).withTimeout(2.5),
                 new InstantCommand(() -> shooter.stop(), shooter)
             )
