@@ -34,12 +34,12 @@ public class ShooterSubsystem extends SubsystemBase {
         followerConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
         followerConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
 
-        // REDLINE LIMITS: Aggressive limits for flywheels
+        // REDLINE LIMITS: Less aggressive limits to save battery
         CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
-        currentLimits.SupplyCurrentLimit = 70.0; 
+        currentLimits.SupplyCurrentLimit = 40.0; 
         currentLimits.SupplyCurrentLimitEnable = true;
 
-        currentLimits.StatorCurrentLimit = 120.0; // Allow massive torque for spin-up
+        currentLimits.StatorCurrentLimit = 80.0; 
         currentLimits.StatorCurrentLimitEnable = true;
 
         leaderConfig.CurrentLimits = currentLimits;

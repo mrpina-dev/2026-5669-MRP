@@ -59,6 +59,8 @@ public class TunerConstants {
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimit(80.0)
                 .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(40.0)
+                .withSupplyCurrentLimitEnable(true)
         );
         
     // REVERTED: Restored the original 60 Amp Stator Limit to the Steer motors
@@ -69,6 +71,8 @@ public class TunerConstants {
                 // stator current limit to help avoid brownouts without impacting performance.
                 .withStatorCurrentLimit(60.0)
                 .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(30.0)
+                .withSupplyCurrentLimitEnable(true)
         );
         
     private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();

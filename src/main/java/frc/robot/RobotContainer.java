@@ -90,8 +90,7 @@ public class RobotContainer {
     public final MariosEar brick = new MariosEar(rizz);
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
     public final ClimbSubsystem climb = new ClimbSubsystem();
-/* 
-    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
+/* public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol1Forward, 
         Constants.Pneumatics.kSol1Reverse);
@@ -107,8 +106,8 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     // State Toggles
-    // UPDATED: Now set to TRUE by default so it tracks on startup!
-    private boolean m_continuousTurretAim = true; 
+    // UPDATED: Now set to FALSE by default so it doesn't drain battery on startup!
+    private boolean m_continuousTurretAim = false; 
     private boolean m_isShooterIdle = false; // Controls if shooter maintains idle speed
 
     public RobotContainer() {
