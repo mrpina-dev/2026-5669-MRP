@@ -39,6 +39,10 @@ public class Marcos {
                 new InstantCommand(() -> shooter.stop(), shooter)
             )
         );
+        
+        NamedCommands.registerCommand("lowerIntake",
+            new InstantCommand(() -> piston1.extend(), piston1)
+        );
 
         // Score preloaded balls without any vision/limelight tracking
         NamedCommands.registerCommand("scorePreload",
