@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.1444867549668873,
-        "y": 7.280190397350992
+        "x": 2.901162514827996,
+        "y": 6.891565836298932
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5128725165562917,
-        "y": 6.786514900662251
+        "x": 2.901162514827996,
+        "y": 7.3219335705812565
       },
       "isLocked": false,
-      "linkedName": "Destruct3End"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.5220033112582776,
-        "y": 0.6300910596026483
+        "x": 3.5467141162514837,
+        "y": 7.3219335705812565
       },
       "prevControl": {
-        "x": 2.5220033112582776,
-        "y": 0.6300910596026484
+        "x": 3.2987083696446793,
+        "y": 7.290419293657909
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DestructStart"
+      "linkedName": "LeftStart"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 3.0,
+    "velocity": 2.0,
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Destruct",
+  "folder": "Left",
   "idealStartingState": {
-    "velocity": 3.0,
-    "rotation": -90.83
+    "velocity": 0,
+    "rotation": -33.97654403625692
   },
   "useDefaultConstraints": true
 }

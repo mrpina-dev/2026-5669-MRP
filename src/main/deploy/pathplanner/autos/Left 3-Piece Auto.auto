@@ -5,51 +5,57 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "One"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0
+            "name": "lowerIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Two"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0
+            "pathName": "Left-to-Pickup"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Three"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0
+            "pathName": "Rotate180Left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Four"
+            "pathName": "Shoot-LeftEnding1"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0
+            "name": "scorePreload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left-to-Pickup-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Rotate180Left2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot-LeftEnding2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "scorePreload"
           }
         }
       ]

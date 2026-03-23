@@ -48,7 +48,6 @@ import frc.robot.commands.GooberAlign;
 import frc.robot.commands.TogglePneumaticCommand;
 import frc.robot.commands.ManualGoobaCommand;
 import frc.robot.commands.ManualTurretCommand;
-import frc.robot.commands.ReverseFHC;
 import frc.robot.commands.RunGroundIntakeCommand;
 import frc.robot.commands.RunClimbMotorCommand;
 import frc.robot.commands.AutoGooba;
@@ -91,11 +90,13 @@ public class RobotContainer {
     public final MariosEar brick = new MariosEar(rizz);
     public final GroundIntakeSubsystem groundIntake = new GroundIntakeSubsystem();
     public final ClimbSubsystem climb = new ClimbSubsystem();
-
-    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
+/* public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol1Forward, 
         Constants.Pneumatics.kSol1Reverse);
+        */
+    public final PneumaticSubsystem ClimbPiston = new PneumaticSubsystem(
+        Constants.Pneumatics.kPcmId, 0);
     public final PneumaticSubsystem DoubleIntake = new PneumaticSubsystem(
         Constants.Pneumatics.kPcmId, 
         Constants.Pneumatics.kSol2Forward, 
@@ -104,7 +105,10 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autoChooser;
 
-    private boolean m_continuousTurretAim = false;
+    // State Toggles
+    // UPDATED: Now set to FALSE by default so it doesn't drain battery on startup!
+    private boolean m_continuousTurretAim = false; 
+    private boolean m_isShooterIdle = false; // Controls if shooter maintains idle speed
 
     public RobotContainer() {
         Marcos.registerNamedCommands(
@@ -175,15 +179,17 @@ public class RobotContainer {
         driverController.rightTrigger().whileTrue(new RunGroundIntakeCommand(groundIntake));
 
         driverController.x().onTrue(new TogglePneumaticCommand(DoubleIntake));
+        driverController.a().onTrue(new TogglePneumaticCommand(ClimbPiston));
 
-        driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
+        //driverController.a().whileTrue(new TogglePneumaticCommand(ClimbPiston));
         driverController.povUp().whileTrue(new RunClimbMotorCommand(climb, Constants.Climb.kClimbSpeed));
         driverController.povDown().whileTrue(new RunClimbMotorCommand(climb, -Constants.Climb.kClimbSpeed));
 
-        // Testing Commands now use the Constants variable
-        driverController.povLeft().whileTrue(new RunCommand(() -> shooter.testLeaderOnly(Constants.Shooter.kTestingRPM), shooter));
-        driverController.povRight().whileTrue(new RunCommand(() -> shooter.testFollowerOnly(Constants.Shooter.kTestingRPM), shooter));
-
+        // Driver D-Pad Left toggles the Idle Shooter Mode
+        driverController.povLeft().onTrue(new InstantCommand(() -> {
+            m_isShooterIdle = !m_isShooterIdle;
+            System.out.println("Shooter Idle State Toggled: " + m_isShooterIdle);
+        }));
 
         // ==========================================
         // --- OPERATOR CONTROLLER (PORT 1) ---
@@ -191,8 +197,12 @@ public class RobotContainer {
 
         operator.leftTrigger().whileTrue(new RunShooterCommand(shooter, Constants.Shooter.kfastTargetRPM));
         operator.rightTrigger().whileTrue(new FeedShooterCommand(index, shooterIntake));
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2d35524596a86b4bf6d6ae99eb6a60479dfdcd28
         
-        // MODIFIED: 'B' Button now independently rewinds the Index Subsystem ONLY
+        // 'B' Button now independently rewinds the Index Subsystem ONLY
         operator.b().whileTrue(new StartEndCommand(
             () -> index.run(Constants.Index.kReverseSpeed), 
             () -> index.stop(), 
@@ -230,7 +240,6 @@ public class RobotContainer {
         operator.povLeft().whileTrue(new ManualTurretCommand(goober, -Constants.Turret.kManualJogSpeed));
         operator.povRight().whileTrue(new ManualTurretCommand(goober, Constants.Turret.kManualJogSpeed));
 
-
         // ==========================================
         // --- SYSTEM DEFAULTS ---
         // ==========================================
@@ -238,6 +247,15 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
+
+        // Default Shooter Command (Enforces Idle state when not shooting)
+        shooter.setDefaultCommand(new RunCommand(() -> {
+            if (m_isShooterIdle) {
+                shooter.runAtRPM(Constants.Shooter.kIdleRPM);
+            } else {
+                shooter.stop(); // Truly turn off if idle is disabled
+            }
+        }, shooter));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

@@ -7,13 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightStart"
+            "name": "lowerIntake"
           }
         },
         {
@@ -37,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
+            "name": "scorePreload"
           }
         },
         {
@@ -61,7 +55,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score"
+            "name": "scorePreload"
           }
         }
       ]

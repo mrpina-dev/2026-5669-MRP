@@ -26,7 +26,7 @@ public class ClimbSubsystem extends SubsystemBase {
         config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 150.0; 
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 1.0; 
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -1000.0; //
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         
         config.MotorOutput.Inverted = Constants.Climb.kMotorInverted ? 
@@ -48,7 +48,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic() {
         double currentPos = m_motor.getPosition().getValueAsDouble();
 
-        System.out.println("CLIMB: " + currentPos);
+       // System.out.println("CLIMB: " + currentPos);
 
     }
 }
