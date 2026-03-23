@@ -88,6 +88,6 @@ public class GoobaSubsystem extends SubsystemBase {
         double currentPos = m_motor.getPosition().getValueAsDouble();
 
         //Helpful for calibration - you can view this in your driver station console or push to SmartDashboard
-        //System.out.println("GOOBA:" + currentPos);
+        System.out.println("GOOBA:" + currentPos);
     }
 }

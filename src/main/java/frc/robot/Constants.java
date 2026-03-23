@@ -43,11 +43,17 @@ public final class Constants {
         public static final double kReverseRPM = -1000.0;   
         public static final double kTestingRPM = 1500.0;    
         
-        // --- IDLE SPEED ---
-        public static final double kIdleRPM = 1400.0; 
+        // --- ABSOLUTE RPM CAP ---
+        public static final double kMaxRPM = 3500.0; 
         
-        // --- DECELERATION RAMP ---
+        // --- IDLE SPEED ---
+        // Increased by 300 RPM for better baseline momentum
+        public static final double kIdleRPM = 1700.0; 
+        
+        // --- ACCELERATION / DECELERATION RAMPS ---
         public static final double kDecelerateStep = 60.0; 
+        // Walks the speed up smoothly (50 RPM every 20ms) to protect gears when idling
+        public static final double kIdleAccelerateStep = 50.0; 
         
         public static final double kP = 0.11;
         public static final double kI = 0.0;
@@ -55,9 +61,7 @@ public final class Constants {
         public static final double kV = 0.12;
 
         // REDLINE LIMITS FOR MAXIMUM ACCELERATION
-        // 80A Supply allows the motor to gulp power from the battery during initial spin-up
         public static final double kSupplyCurrentLimit = 80.0;
-        // 160A Stator unlocks massive physical torque for instant snap
         public static final double kStatorCurrentLimit = 160.0; 
 
         // 0.0 RAMPS FOR INSTANT PUNCH
