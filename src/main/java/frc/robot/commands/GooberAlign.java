@@ -7,7 +7,12 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class GooberAlign extends Command {
     private final LimelightSubsystem limelight;
     private final Goober turret;
-    private int seekDirection = 0;
+    
+    // Start at 1 so it sweeps right if it starts without a tag
+    private int seekDirection = 1; 
+    
+    // Safe speed for scanning back and forth
+    private final double SEARCH_SPEED = 0.25; 
 
     public GooberAlign(LimelightSubsystem limelight, Goober turret) {
         this.limelight = limelight;
@@ -18,25 +23,25 @@ public class GooberAlign extends Command {
     @Override
     public void execute() {
         if (limelight.isTargetAvailable() && limelight.isValidTarget()) {
-            seekDirection = 0;
+            // Track the target
             double tx = -limelight.getNewTX();
             turret.aimAtTarget(tx);
         } else {
+            // Hunt for the target
             double currentPosition = turret.getPosition();
 
-            // The Unwrap Trigger (1 rotation before hitting hard limits)
-            if (currentPosition >= 27.0) {
-                seekDirection = -1; 
-            } else if (currentPosition <= -89.0) {
-                seekDirection = 1;  
+            // Wrap around safely inside the 10.0 and -25.0 hardware soft limits
+            if (currentPosition >= 9.5) {
+                seekDirection = -1; // Hit right limit, sweep left
+            } else if (currentPosition <= -24.5) {
+                seekDirection = 1;  // Hit left limit, sweep right
             }
-
+ 
+            // Apply the sweep speed
             if (seekDirection == 1) {
-                turret.setMotorSpeed(1.0); 
+                turret.setMotorSpeed(SEARCH_SPEED); 
             } else if (seekDirection == -1) {
-                turret.setMotorSpeed(-1.0);
-            } else {
-                turret.stop();
+                turret.setMotorSpeed(-SEARCH_SPEED);
             }
         }
     }
@@ -49,6 +54,6 @@ public class GooberAlign extends Command {
     @Override
     public void end(boolean interrupted) {
         turret.stop();
-        seekDirection = 0; 
+        seekDirection = 1; // Reset state for the next time the command runs
     }
 }

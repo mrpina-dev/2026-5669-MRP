@@ -24,9 +24,6 @@ public final class Constants {
         public static final int kSol2Forward = 2; 
         public static final int kSol2Reverse = 3;
 
-       // public static final int kSol1Single = 0;
-       // public static final int kSolSingle = 1;
-
         public static final int kSol3Forward = 6;
         public static final int kSol3Reverse = 7;
     }
@@ -50,7 +47,6 @@ public final class Constants {
         public static final double kIdleRPM = 1400.0; 
         
         // --- DECELERATION RAMP ---
-        // Subtracts this much RPM every 20ms when dropping from High Speed to Idle
         public static final double kDecelerateStep = 60.0; 
         
         public static final double kP = 0.11;
@@ -58,10 +54,15 @@ public final class Constants {
         public static final double kD = 0.0;
         public static final double kV = 0.12;
 
-        public static final double kSupplyCurrentLimit = 60.0;
+        // REDLINE LIMITS FOR MAXIMUM ACCELERATION
+        // 80A Supply allows the motor to gulp power from the battery during initial spin-up
+        public static final double kSupplyCurrentLimit = 80.0;
+        // 160A Stator unlocks massive physical torque for instant snap
+        public static final double kStatorCurrentLimit = 160.0; 
 
-        public static final double kVoltageRampPeriod = 0.25;
-        public static final double kDutyCycleRampPeriod = 0.25;
+        // 0.0 RAMPS FOR INSTANT PUNCH
+        public static final double kVoltageRampPeriod = 0.0;
+        public static final double kDutyCycleRampPeriod = 0.0;
     }
 
     public static final class Index {
@@ -87,9 +88,9 @@ public final class Constants {
         public static final double kManualJogSpeed = 0.2;
         public static final double kSweepSpeed = 1.0;
         
-        public static final double kP = 0.020; //
+        public static final double kP = 0.020; 
         public static final double kI = 0.00;
-        public static final double kD = 0.001; // 0.001
+        public static final double kD = 0.001; 
         public static final double kToleranceDegrees = 1.0; 
         
         public static final double kMaxOutput = 0.5;

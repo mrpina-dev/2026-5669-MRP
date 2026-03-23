@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,6 +15,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX follower = new TalonFX(Constants.Shooter.kFollowerId);
     
     private final VelocityVoltage m_velocityRequest = new VelocityVoltage(0);
+    
+    private double currentTargetRpm = 0.0;
 
     public ShooterSubsystem() {
         TalonFXConfiguration leaderConfig = new TalonFXConfiguration();
@@ -34,12 +37,12 @@ public class ShooterSubsystem extends SubsystemBase {
         followerConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Shooter.kVoltageRampPeriod;
         followerConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Shooter.kDutyCycleRampPeriod;
 
-        // REDLINE LIMITS: Less aggressive limits to save battery
+        // MAX PERFORMANCE LIMITS: Tied directly to Constants for easy tuning
         CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
-        currentLimits.SupplyCurrentLimit = 40.0; 
+        currentLimits.SupplyCurrentLimit = Constants.Shooter.kSupplyCurrentLimit; 
         currentLimits.SupplyCurrentLimitEnable = true;
 
-        currentLimits.StatorCurrentLimit = 80.0; 
+        currentLimits.StatorCurrentLimit = Constants.Shooter.kStatorCurrentLimit; 
         currentLimits.StatorCurrentLimitEnable = true;
 
         leaderConfig.CurrentLimits = currentLimits;
@@ -60,48 +63,61 @@ public class ShooterSubsystem extends SubsystemBase {
         follower.getConfigurator().apply(followerConfig);
     }
 
+    public double getCurrentRpm() {
+        // Phoenix 6 returns Rotations per Second, so we multiply by 60 to get RPM
+        return leader.getVelocity().getValueAsDouble() * 60.0;
+    }
+
     public void runAtRPM(double targetRpm) {
-        // 1. Get the current, physical speed of the wheel from the motor encoder
-        // (Phoenix 6 returns Rotations per Second, so we multiply by 60 to get RPM)
-        double currentPhysicalRpm = leader.getVelocity().getValueAsDouble() * 60.0;
+        currentTargetRpm = targetRpm;
+        
+        double currentPhysicalRpm = getCurrentRpm();
         double nextTargetRps;
 
-        // 2. SMOOTH SPIN-DOWN LOGIC:
-        // If the wheel is spinning much faster than our new target (e.g., dropping from 7k to idle),
-        // we don't want the PID loop to slam the brakes with reverse voltage. 
-        // We command the motor to go just a tiny bit slower than its CURRENT speed, walking it down gently.
+        // SMOOTH SPIN-DOWN LOGIC
         if (currentPhysicalRpm > targetRpm + 100.0) {
-            
             double gentleRampDownRpm = currentPhysicalRpm - Constants.Shooter.kDecelerateStep; 
-            
-            // Prevent overshooting the target downwards
             if (gentleRampDownRpm < targetRpm) {
                 gentleRampDownRpm = targetRpm;
             }
             nextTargetRps = gentleRampDownRpm / 60.0;
-            
         } else {
-            // If we are speeding up, or maintaining speed, apply the target instantly for max acceleration!
+            // Instant application for max acceleration
             nextTargetRps = targetRpm / 60.0;
         }
 
-        // Apply the calculated safe speed
         leader.setControl(m_velocityRequest.withVelocity(nextTargetRps));
         follower.setControl(m_velocityRequest.withVelocity(nextTargetRps));
     }
 
     public void testLeaderOnly(double rpm) {
+        currentTargetRpm = rpm;
         leader.setControl(m_velocityRequest.withVelocity(rpm / 60.0));
         follower.stopMotor(); 
     }
 
     public void testFollowerOnly(double rpm) {
+        currentTargetRpm = rpm;
         follower.setControl(m_velocityRequest.withVelocity(rpm / 60.0));
         leader.stopMotor(); 
     }
 
     public void stop() {
+        currentTargetRpm = 0.0;
         leader.stopMotor();
         follower.stopMotor();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Shooter Actual RPM", getCurrentRpm());
+        SmartDashboard.putNumber("Shooter Target RPM", currentTargetRpm);
+        
+        // Grab the live stator current (torque) so you can physically see the acceleration effort
+        double currentDraw = Math.round(leader.getStatorCurrent().getValueAsDouble() * 10.0) / 10.0;
+        
+        System.out.println("SHOOTER RPM: " + Math.round(getCurrentRpm()) + 
+                           " | TARGET: " + currentTargetRpm + 
+                           " | TORQUE AMPS: " + currentDraw);
     }
 }
