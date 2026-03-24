@@ -12,7 +12,7 @@ public class GooberAlign extends Command {
     private int seekDirection = 1; 
     
     // Safe speed for scanning back and forth
-    private final double SEARCH_SPEED = 0.25; 
+    private final double SEARCH_SPEED = 0.15; 
 
     public GooberAlign(LimelightSubsystem limelight, Goober turret) {
         this.limelight = limelight;
