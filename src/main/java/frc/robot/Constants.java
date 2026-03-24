@@ -88,7 +88,7 @@ public final class Constants {
         public static final double kManualJogSpeed = 0.2;
         public static final double kSweepSpeed = 1.0;
         
-        public static final double kP = 0.020; 
+        public static final double kP = 0.015; 
         public static final double kI = 0.00;
         public static final double kD = 0.001; 
         public static final double kToleranceDegrees = 1.0; 
