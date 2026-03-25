@@ -94,8 +94,11 @@ public class ShooterSubsystem extends SubsystemBase {
             }
             
         } else {
-            // 3. ACTUAL SHOOTING (Instant application for max acceleration)
-            m_rampedSetpointRpm = targetRpm;
+            // 3. SHOOTING SPIN-UP (Controlled ramp to avoid voltage sag)
+            m_rampedSetpointRpm += Constants.Shooter.kShootAccelerateStep;
+            if (m_rampedSetpointRpm > targetRpm) {
+                m_rampedSetpointRpm = targetRpm;
+            }
         }
 
         // Send the managed software setpoint to the TalonFX

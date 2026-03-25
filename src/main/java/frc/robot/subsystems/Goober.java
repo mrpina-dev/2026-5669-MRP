@@ -22,7 +22,7 @@ public class Goober extends SubsystemBase {
     );
 
     // JITTER FIX: A moving average filter to smooth out Limelight pixel noise
-    private final LinearFilter txFilter = LinearFilter.movingAverage(5);
+    private final LinearFilter txFilter = LinearFilter.movingAverage(2);
 
     public Goober() {
         configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -25.0;

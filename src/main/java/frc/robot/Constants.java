@@ -32,10 +32,11 @@ public final class Constants {
         public static final double kslowTargetRPM = 2500.0; 
         public static final double kReverseRPM = -1000.0;   
         public static final double kTestingRPM = 1500.0;    
-        public static final double kMaxRPM = 3500.0; 
+        public static final double kMaxRPM = 7000.0; 
         public static final double kIdleRPM = 1700.0; 
         public static final double kDecelerateStep = 60.0; 
         public static final double kIdleAccelerateStep = 50.0; 
+        public static final double kShootAccelerateStep = 150.0;
         public static final double kP = 0.11;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
@@ -63,14 +64,14 @@ public final class Constants {
     public static final class Turret {
         public static final int kMotorId = 14; 
         public static final double kSpeedMultiplier = 1.0;
-        public static final double kManualJogSpeed = 0.2;
+        public static final double kManualJogSpeed = 0.4;
         public static final double kSweepSpeed = 1.0;
         
-        public static final double kP = 0.010; 
+        public static final double kP = 0.025; 
         public static final double kI = 0.00;
-        public static final double kD = 0.0002; 
+        public static final double kD = 0.0005; 
         public static final double kToleranceDegrees = 1.0; 
-        public static final double kMaxOutput = 0.5;
+        public static final double kMaxOutput = 0.75;
     }
 
     public static final class Auton {
