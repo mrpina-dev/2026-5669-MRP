@@ -74,14 +74,14 @@ public final class Constants {
         public static final double kForwardSoftLimit = 10.0;
 
         // MotionMagic tuning (runs at 1000Hz inside the TalonFX)
-        public static final double kP = 60.0;
+        public static final double kP = 4.0;
         public static final double kI = 0.0;
-        public static final double kD = 2.0;
-        public static final double kV = 0.0;
+        public static final double kD = 0.1;
+        public static final double kV = 0.12;
 
         // MotionMagic motion profile
-        public static final double kCruiseVelocity = 80.0;
-        public static final double kAcceleration = 400.0;
+        public static final double kCruiseVelocity = 60.0;
+        public static final double kAcceleration = 120.0;
         public static final double kJerk = 0.0;
 
         // Tolerance: 0.18 rotations = ~1.5 degrees of turret
