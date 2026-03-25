@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +25,9 @@ public class Goober extends SubsystemBase {
 
     // Track whether we currently have a position target
     private boolean m_isTracking = false;
+    private int m_lostTargetCounter = 0;
+    private static final int kLostTargetThreshold = 10;
+    private static final double kTxDeadband = 1.5;
 
     public Goober() {
         TalonFXConfiguration configs = new TalonFXConfiguration();
@@ -61,17 +64,26 @@ public class Goober extends SubsystemBase {
      * The TalonFX handles the control loop at 1000Hz internally.
      */
     public void aimAtTarget(double rawTx) {
-        // Smooth out Limelight pixel noise
+        m_lostTargetCounter = 0;
+
         double smoothedTx = txFilter.calculate(rawTx);
 
-        // Convert TX angle error to a motor rotation target.
-        // TX=0 means centered. We offset current position by the error.
+        if (Math.abs(smoothedTx) < kTxDeadband) {
+            m_isTracking = true;
+            return;
+        }
+
         double currentPosition = motor.getPosition().getValueAsDouble();
         double errorInRotations = smoothedTx / Constants.Turret.kDegreesPerMotorRotation;
         double targetPosition = currentPosition - errorInRotations;
 
         m_isTracking = true;
         motor.setControl(m_positionRequest.withPosition(targetPosition));
+    }
+
+    public boolean shouldSearch() {
+        m_lostTargetCounter++;
+        return m_lostTargetCounter >= kLostTargetThreshold;
     }
 
     /**

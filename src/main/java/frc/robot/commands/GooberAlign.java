@@ -27,19 +27,20 @@ public class GooberAlign extends Command {
             double tx = -limelight.getNewTX();
             turret.aimAtTarget(tx);
         } else {
-            // Hunt for the target
+            if (!turret.shouldSearch()) {
+                return;
+            }
+
             double currentPosition = turret.getPosition();
 
-            // Wrap around safely inside the 10.0 and -25.0 hardware soft limits
             if (currentPosition >= 9.5) {
-                seekDirection = -1; // Hit right limit, sweep left
+                seekDirection = -1;
             } else if (currentPosition <= -24.5) {
-                seekDirection = 1;  // Hit left limit, sweep right
+                seekDirection = 1;
             }
- 
-            // Apply the sweep speed
-           if (seekDirection == 1) {
-                turret.setMotorSpeed(SEARCH_SPEED); 
+
+            if (seekDirection == 1) {
+                turret.setMotorSpeed(SEARCH_SPEED);
             } else if (seekDirection == -1) {
                 turret.setMotorSpeed(-SEARCH_SPEED);
             }
