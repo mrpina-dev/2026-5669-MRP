@@ -62,16 +62,37 @@ public final class Constants {
     }
 
     public static final class Turret {
-        public static final int kMotorId = 14; 
-        public static final double kSpeedMultiplier = 1.0;
+        public static final int kMotorId = 14;
+
+        // Gear ratio: 4:1 first stage, 150:14 second stage = 42.857:1 total
+        // 1 motor rotation = 8.4 degrees of turret rotation
+        public static final double kGearRatio = 42.8571;
+        public static final double kDegreesPerMotorRotation = 8.4;
+
+        // Soft limits in motor rotations (-25.0 to +10.0 = ~294 degrees of travel)
+        public static final double kReverseSoftLimit = -25.0;
+        public static final double kForwardSoftLimit = 10.0;
+
+        // MotionMagic tuning (runs at 1000Hz inside the TalonFX)
+        public static final double kP = 60.0;
+        public static final double kI = 0.0;
+        public static final double kD = 2.0;
+        public static final double kV = 0.0;
+
+        // MotionMagic motion profile
+        public static final double kCruiseVelocity = 80.0;
+        public static final double kAcceleration = 400.0;
+        public static final double kJerk = 0.0;
+
+        // Tolerance: 0.18 rotations = ~1.5 degrees of turret
+        public static final double kToleranceRotations = 0.18;
+
+        // Manual jog and search speeds (percent output)
         public static final double kManualJogSpeed = 0.4;
-        public static final double kSweepSpeed = 1.0;
-        
-        public static final double kP = 0.025; 
-        public static final double kI = 0.00;
-        public static final double kD = 0.0005; 
-        public static final double kToleranceDegrees = 1.0; 
-        public static final double kMaxOutput = 0.75;
+        public static final double kSearchSpeed = 0.18;
+
+        // Current limit
+        public static final double kSupplyCurrentLimit = 40.0;
     }
 
     public static final class Auton {
